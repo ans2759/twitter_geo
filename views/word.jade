@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    #app(ng-app='wordApp', ng-controller='WordCtrl')
+        h1= word
+        p word: #{word}
+        if tweets
+            each tweet in tweets
+                p #{tweet.text}
+        else
+            p Waiting
+        script(src='/javascripts/wordCtrl.js')

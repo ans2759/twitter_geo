@@ -47,9 +47,9 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-db.connect();
-
-stopWords.load();
-tweetCacther.catchTweets();
+// db.connect();
+// stopWords.load();
+db.buildIndex();
+// tweetCacther.catchTweets();
 
 module.exports = app;
