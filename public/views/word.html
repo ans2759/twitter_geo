@@ -1,24 +1,8 @@
 <div>
     <h1> Word: {{ctrl.word}}</h1>
 
-    <div id="map"></div>
-
     <p data-ng-if="ctrl.tweets.length > 0" data-ng-repeat="tweet in ctrl.tweets">
         {{tweet.text}}
     </p>
     <p data-ng-if="ctrl.tweets.length < 1">Waiting</p>
-
-    <script>
-        var map;
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: -34.397, lng: 150.644},
-                zoom: 8
-            });
-        }
-    </script>
-
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCS8fjIGPZZxqmKBCNDv4wyerRV9HEV6sM&callback=initMap">
-    </script>
 </div>

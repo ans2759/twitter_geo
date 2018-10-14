@@ -30,69 +30,6 @@ const insertWords = function(indexedWords, foundWords) {
         resolve();
     });
 };
-/*exports.buildIndex = function () {
-// Connect to the db
-    MongoClient.connect(url, function(err, client) {
-        assert.equal(null, err);
-        console.log("Connected correctly to server");
-
-        const db = client.db(dbName);
-        const indexedWords = db.collection('indexedwords');
-        const stopwords = db.collection('stopwords');
-        const testtweets = db.collection('testtweets');
-
-        let stopWordsList = [];
-        let foundWords = {};
-
-        stopwords.find().each(function (err, word) {
-            assert.equal(null, err);
-            if (word !== null) {
-                stopWordsList.push(word.word);
-            } else {
-                testtweets.find().each(function (err, tweet) {
-                    assert.equal(null, err);
-                    if (tweet !== null) {
-                       tweet.text.split(' ').forEach(function (word, index) {
-                           word = word.trim().replace(/[^a-z0-9]/gi, '').toLowerCase();
-                           if (word !== '') {
-                               if (stopWordsList.indexOf(word) === -1) {
-                                   if (foundWords[word]) {
-                                       foundWords[word].count++;
-                                       if (foundWords[word].tweets.indexOf(tweet._id) === -1) {
-                                           foundWords[word].tweets.push(tweet._id);
-                                       }
-                                   } else {
-                                       foundWords[word] = {
-                                           word: word,
-                                           count: 1,
-                                           tweets: [tweet._id]
-                                       };
-                                   }
-                               }
-                           }
-                       });
-                    } else {
-                        let indexedWordsExists = false;
-                        db.listCollections().toArray(function(err, collections) {
-                            assert.equal(null, err);
-
-                            collections.forEach(function(col, index) {
-                                if (col.name === 'indexedwords') indexedWordsExists = true;
-                            });
-                        });
-                        if (indexedWordsExists) {
-                            indexedWords.drop(function (err, delOK) {
-                                assert.equal(null, err);
-                            });
-                        }
-                        insertWords(indexedWords, foundWords);
-                        // client.close();
-                    }
-                });
-            }
-        });
-    });
-};*/
 
 exports.buildIndex = function () {
     return new Promise(function(resolve, reject) {

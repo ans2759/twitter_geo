@@ -4,14 +4,21 @@
     <meta charset="UTF-8">
     <title>Twitter Geo</title>
 
+    <script async defer src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCS8fjIGPZZxqmKBCNDv4wyerRV9HEV6sM"></script>
     <script src="libs/angular/angular.min.js"></script>
     <script src="libs/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="libs/angular-resource/angular-resource.min.js"></script>
+    <script src="libs/angular-ui-event/dist/event.js"></script>
     <script src="javascripts/app.js"></script>
     <script src="javascripts/homeCtrl.js"></script>
     <script src="javascripts/wordCtrl.js"></script>
+    <script src="javascripts/mapUtil.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css">
+
 </head>
 <body>
+
+<div id="map"></div>
 
 <div ng-app="app">
 

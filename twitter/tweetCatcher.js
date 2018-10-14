@@ -1,7 +1,7 @@
 /**
  * Created by alexs on 2/18/2018.
  */
-var lonLat = '-74.042,40.687,-73.878,40.859';
+const lonLat = '-74.042,40.687,-73.878,40.859';
 
 var APIKeys = require('../secure/twitterAccess');
 const MongoClient = require('mongodb').MongoClient;

@@ -9,6 +9,9 @@
 
         const _this = this;
         _this.words = [];
+
+        angular.element(document.getElementById('map')).attr('style', 'height:0');
+
         /*ResourceFactory.getCommonWords().then(function(response){
             _this.words = response.data;
             console.log('Common words retrieved');
