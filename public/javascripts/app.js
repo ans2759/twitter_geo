@@ -18,7 +18,10 @@ const app = angular.module("app", ['ui.router', 'ngResource'])
             url: '/word/:word',
             controller: 'WordCtrl',
             controllerAs: 'ctrl',
-            templateUrl: 'views/word.html'
+            templateUrl: 'views/word.html',
+            onExit: function(map) {
+                map.hideMap();
+            }
         });
     })
 
@@ -33,6 +36,11 @@ const app = angular.module("app", ['ui.router', 'ngResource'])
                     method: 'GET',
                     isArray: true,
                     url: '/word'
+                },
+                getCoordinates: {
+                    method: 'GET',
+                    isArray: false,
+                    url: '/coordinates'
                 }
             }
         );

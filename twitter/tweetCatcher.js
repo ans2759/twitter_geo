@@ -1,7 +1,9 @@
 /**
  * Created by alexs on 2/18/2018.
  */
-const lonLat = '-74.042,40.687,-73.878,40.859';
+const lowerLeft = '-74.042,40.687';
+const upperRight = '-73.878,40.859';
+const lonLat = lowerLeft + ',' + upperRight;
 
 var APIKeys = require('../secure/twitterAccess');
 const MongoClient = require('mongodb').MongoClient;
@@ -44,4 +46,10 @@ exports.catchTweets = function() {
             throw err;
         });
     });
+};
+
+exports.getCenter = function () {
+    const lower = lowerLeft.split(',');
+    const upper = upperRight.split(',');
+    const lat = lower[0] /
 };

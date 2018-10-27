@@ -35,4 +35,8 @@ router.get('/word',  function (req, res, next) {
     }
 });
 
+router.get('/coordinates', function(req, res, next) {
+    res.json({lat: 40.687, lng: -74.042})
+});
+
 module.exports = router;

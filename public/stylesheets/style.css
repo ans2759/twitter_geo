@@ -14,5 +14,6 @@ a {
 }
 
 #map {
-  height: 0;
+  height: 100%;
+  visibility: hidden;
 }
