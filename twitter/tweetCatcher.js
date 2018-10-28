@@ -5,18 +5,18 @@ const lowerLeft = '-74.042,40.687';
 const upperRight = '-73.878,40.859';
 const lonLat = lowerLeft + ',' + upperRight;
 
-var APIKeys = require('../secure/twitterAccess');
+const APIKeys = require('../secure/twitterAccess');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 
-var Twitter = require('twitter')
+const Twitter = require('twitter')
     , twitterClient = new Twitter({consumer_key: APIKeys.consumer_key,
     consumer_secret: APIKeys.consumer_secret,
     access_token_key: APIKeys.access_token_key,
     access_token_secret: APIKeys.access_token_secret
 });
 
-var counter = 0;
+let counter = 0;
 
 exports.catchTweets = function() {
     MongoClient.connect('mongodb://localhost:27017/test', function(err, client) {
@@ -26,7 +26,7 @@ exports.catchTweets = function() {
         const db = client.db('test');
         const collection = db.collection('testtweets');
 
-        var stream = twitterClient.stream('statuses/filter',{ locations: lonLat });
+        const stream = twitterClient.stream('statuses/filter',{ locations: lonLat });
 
         stream.on('data', function (tweet) {
             if(tweet.geo !== null) {
@@ -51,5 +51,12 @@ exports.catchTweets = function() {
 exports.getCenter = function () {
     const lower = lowerLeft.split(',');
     const upper = upperRight.split(',');
-    const lat = lower[0] /
+    return {
+        lat: calcMiddle(parseFloat(upper[1]), parseFloat(lower[1])),
+        lng: calcMiddle(parseFloat(upper[0]), parseFloat(lower[0]))
+    };
+};
+
+const calcMiddle = function(upper, lower) {
+    return parseFloat((((upper - lower) / 2) + lower).toFixed(3));
 };

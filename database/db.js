@@ -1,7 +1,6 @@
 /**
  * Created by alexs on 2/11/2018.
  */
-// Retrieve
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 
@@ -14,7 +13,7 @@ exports.commonWords = [];
 
 const insertWords = function(indexedWords, foundWords) {
     return new Promise(function(resolve, reject) {
-        for(var key in foundWords) {
+        for(const key in foundWords) {
             if(foundWords.hasOwnProperty(key)) {
                 indexedWords.insertOne(foundWords[key], function (err, record) {
                     if (err !== null) {
