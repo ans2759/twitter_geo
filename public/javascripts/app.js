@@ -8,7 +8,7 @@ const app = angular.module("app", ['ui.router', 'ngResource'])
         $urlRouterProvider.otherwise('/home');
 
         $stateProvider.state('home', {
-            url: '/home',
+            url: '/home?skipUser',
             controller: 'HomeCtrl',
             controllerAs: 'ctrl',
             templateUrl: 'views/home.html'
@@ -22,6 +22,13 @@ const app = angular.module("app", ['ui.router', 'ngResource'])
             onExit: function(map) {
                 map.hideMap();
             }
+        });
+
+        $stateProvider.state('newUser', {
+            url: '/newUser',
+            controller: 'NewUserCtrl',
+            controllerAs: 'ctrl',
+            templateUrl: 'views/newUser.html'
         });
     })
 
@@ -41,6 +48,20 @@ const app = angular.module("app", ['ui.router', 'ngResource'])
                     method: 'GET',
                     isArray: false,
                     url: '/coordinates'
+                },
+                getUser: {
+                    method: 'GET',
+                    isArray: false,
+                    url: '/getUser'
+                },
+                getTwitterUser: {
+                    method: 'GET',
+                    isArray: false,
+                    url: '/getTwitterUser'
+                },
+                createUser: {
+                    method: 'POST',
+                    url: '/createUser'
                 }
             }
         );

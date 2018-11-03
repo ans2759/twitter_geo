@@ -1,0 +1,9 @@
+<div>
+    <h1>New User</h1>
+    <div data-ng-if="ctrl.user">
+        <h2>Welcome {{ctrl.user.displayName}}</h2>
+        <p>Would you like to create an account?</p>
+        <button data-ng-click="ctrl.createUser()" type="button" class="btn btn-primary">Yes</button>
+        <button data-ng-click="ctrl.doNotCreateUser()" type="button" class="btn btn-warning">No</button>
+    </div>
+</div>

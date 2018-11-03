@@ -167,3 +167,43 @@ exports.getTweets = function(word) {
     })
 };
 
+exports.getUser = function(userId) {
+    return new Promise(function (resolve, reject) {
+        MongoClient.connect(url).then(function(client) {
+            const db = client.db(dbName);
+            db.collection('users').findOne({userId: userId}, function(err, user) {
+                client.close();
+                if (err !== null) {
+                    reject(err);
+                } else {
+                    resolve(user);
+                }
+            });
+        });
+    });
+};
+
+exports.createUser = function(user) {
+    return new Promise(function (resolve, reject) {
+        MongoClient.connect(url).then(function(client) {
+            const db = client.db(dbName);
+            db.collection('users').insertOne(buildUserObject(user), function (err, result) {
+                if (err !== null) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            })
+        });
+    });
+};
+
+function buildUserObject(twitterUser) {
+    return {
+        userId: twitterUser.id,
+        username: twitterUser.username,
+        displayName: twitterUser.displayName,
+        isAdmin: false
+    }
+}
+
