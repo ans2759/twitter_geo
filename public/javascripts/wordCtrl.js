@@ -14,11 +14,22 @@
         ResourceFactory.getWord({word: $stateParams.word}, function (response) {
             _this.tweets = response;
 
-            map.initMap(_this.tweets);
+            map.initMap();
 
         }, function (err) {
             console.error('Error retrieving tweets for ' + $stateParams.word, err);
-        })
+        });
+
+        _this.showTweet = function(tweet) {
+            map.deleteMarkers();
+            map.addMarker(tweet, true);
+        };
+
+        _this.showAllTweets = function() {
+            map.deleteMarkers();
+            map.addTweets(_this.tweets);
+        };
+
     };
     WordCtrl.$inject = ['$stateParams', 'ResourceFactory', 'map', '$window'];
     app.controller("WordCtrl", WordCtrl)

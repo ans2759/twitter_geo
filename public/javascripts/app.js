@@ -1,14 +1,14 @@
 /**
  * Created by alexs on 8/13/2018.
  */
-const app = angular.module("app", ['ui.router', 'ngResource'])
+const app = angular.module("app", ['ui.router', 'ngResource', 'ngCookies', 'ngToast'])
 
     .config(function($stateProvider, $urlRouterProvider) {
 
         $urlRouterProvider.otherwise('/home');
 
         $stateProvider.state('home', {
-            url: '/home?skipUser',
+            url: '/home?accountCreated',
             controller: 'HomeCtrl',
             controllerAs: 'ctrl',
             templateUrl: 'views/home.html'
@@ -20,7 +20,7 @@ const app = angular.module("app", ['ui.router', 'ngResource'])
             controllerAs: 'ctrl',
             templateUrl: 'views/word.html',
             onExit: function(map) {
-                map.hideMap();
+                map.deleteMarkers();
             }
         });
 

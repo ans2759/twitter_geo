@@ -5,5 +5,9 @@
     "bootstrap": "latest",
     "angular": "latest",
     "angular-route": "latest"
+  },
+  "resolutions": {
+    "angular": "1.7.3",
+    "angular-cookies": "1.7.3"
   }
 }

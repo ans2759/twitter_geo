@@ -4,15 +4,19 @@
 (function () {
     'use strict';
     const app = angular.module('app');
-    const HomeCtrl = function (ResourceFactory, $state, $stateParams) {
+    const HomeCtrl = function (ResourceFactory, $state, $stateParams, $cookies, ngToast, $location) {
         console.log("HomeCtrl init");
 
         const _this = this;
         _this.words = [];
-        angular.element(document.getElementById('map')).attr('style', 'height:0');
+
+        if ($stateParams.accountCreated) {
+            $location.url('home');
+            ngToast.success('Account successfully created');
+        }
 
         ResourceFactory.getUser({}, function(response) {
-            if ($stateParams.skipUser || response.user) {
+            if ($cookies.get('skipUser') || response.user) {
                 getCommonWords()
             } else {
                 $state.go('newUser');
@@ -30,6 +34,6 @@
             });
         }
     };
-    HomeCtrl.$inject = ['ResourceFactory', '$state', '$stateParams'];
+    HomeCtrl.$inject = ['ResourceFactory', '$state', '$stateParams', '$cookies', 'ngToast', '$location'];
     app.controller('HomeCtrl', HomeCtrl);
 }());

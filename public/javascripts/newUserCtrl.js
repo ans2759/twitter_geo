@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     const app = angular.module('app');
-    const NewUserCtrl = function ($stateParams, ResourceFactory, map, $window, $state) {
+    const NewUserCtrl = function ($stateParams, ResourceFactory, map, $window, $state, $cookies) {
         console.log("NewUserCtrl init");
 
         const _this = this;
@@ -16,16 +16,19 @@
 
         _this.createUser = function() {
            ResourceFactory.createUser({}, function (response) {
-               $state.go('home');
+               $state.go('home', {accountCreated: true});
            }, function (err) {
                console.error("Error creating user", err);
            })
         };
 
         _this.doNotCreateUser = function() {
-            $state.go('home', {skipUser: true});
+            let cookieExpiry = new Date();
+            cookieExpiry.setDate(cookieExpiry.getDate() + 7);
+            $cookies.put('skipUser', true, {expires: cookieExpiry});
+            $state.go('home');
         };
     };
-    NewUserCtrl.$inject = ['$stateParams', 'ResourceFactory', 'map', '$window', '$state'];
+    NewUserCtrl.$inject = ['$stateParams', 'ResourceFactory', 'map', '$window', '$state', '$cookies'];
     app.controller("NewUserCtrl", NewUserCtrl)
 }());

@@ -1,8 +1,15 @@
 <div>
     <h1> Word: {{ctrl.word}}</h1>
 
-    <p data-ng-if="ctrl.tweets.length > 0" data-ng-repeat="tweet in ctrl.tweets">
-        {{tweet.text}}
-    </p>
+    <button data-ng-disabled="ctrl.tweets.length < 1" data-ng-click="ctrl.showAllTweets()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Show Map
+    </button>
+
+    <div data-ng-if="ctrl.tweets.length > 0" data-ng-repeat="tweet in ctrl.tweets">
+        <p class="d-inline-block">
+            {{tweet.text}}
+        </p>
+        <button data-ng-click="ctrl.showTweet(tweet)" type="button" class="btn btn-primary btn-sm"  data-toggle="modal" data-target="#exampleModal">Show on map</button>
+    </div>
     <p data-ng-if="ctrl.tweets.length < 1">Waiting</p>
 </div>
