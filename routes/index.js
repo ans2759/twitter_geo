@@ -61,6 +61,13 @@ router.get('/getTwitterUser', cel.ensureLoggedIn(), function (req, res, next) {
     res.json(req.user);
 });
 
+router.get('/isAdmin', cel.ensureLoggedIn(), function (req, res, next) {
+    console.log("isAdmin");
+    db.getUser(req.user.id).then(function (user) {
+        res.json({isAdmin: user.isAdmin});
+    });
+});
+
 router.post('/createUser', cel.ensureLoggedIn(), function (req, res, next) {
    if (req.user) {
        console.log('Creating user ' + req.user.displayName);
@@ -101,6 +108,19 @@ router.get('/common-words', cel.ensureLoggedIn(), function (req, res, next) {
 });
 /**
  * *****************************End Word Routes
+ */
+
+/**
+ * *****************************Admin Routes
+ */
+router.get('/getBoundingInfo', cel.ensureLoggedIn(), function (req, res, next) {
+    console.log('Retrieving bounding box info');
+    db.getBoundingInfo().then(function(data) {
+        res.json(data);
+    })
+});
+/**
+ * *****************************End Admin Routes
  */
 
 /**

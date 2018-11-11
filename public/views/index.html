@@ -20,17 +20,32 @@
     <script src="libs/ngToast/dist/ngToast.min.js"></script>
     <script src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="javascripts/app.js"></script>
-    <script src="javascripts/homeCtrl.js"></script>
-    <script src="javascripts/wordCtrl.js"></script>
-    <script src="javascripts/newUserCtrl.js"></script>
-    <script src="javascripts/map.js"></script>
+    <script src="javascripts/controllers/homeCtrl.js"></script>
+    <script src="javascripts/controllers/wordCtrl.js"></script>
+    <script src="javascripts/controllers/newUserCtrl.js"></script>
+    <script src="javascripts/controllers/adminCtrl.js"></script>
+    <script src="javascripts/controllers/notAuthorizedCtrl.js"></script>
+    <script src="javascripts/services/map.js"></script>
+    <script src="javascripts/directives/isAdmin.js"></script>
 
 </head>
 <body>
 
     <div ng-app="app">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" data-ui-sref="home">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" data-ui-sref="home">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" data-is-admin data-ui-sref="admin">Admin</a>
+                </div>
+            </div>
+        </nav>
 
-        <div ui-view></div>
+        <div class="container-fluid" ui-view></div>
 
         <hr />
     </div>

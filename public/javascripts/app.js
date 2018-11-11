@@ -30,6 +30,20 @@ const app = angular.module("app", ['ui.router', 'ngResource', 'ngCookies', 'ngTo
             controllerAs: 'ctrl',
             templateUrl: 'views/newUser.html'
         });
+
+        $stateProvider.state('admin', {
+            url: '/admin',
+            controller: 'AdminCtrl',
+            controllerAs: 'ctrl',
+            templateUrl: 'views/admin.html'
+        });
+
+        $stateProvider.state('notAuthorized', {
+            url: '/notAuthorized?section',
+            controller: 'NotAuthorizedCtrl',
+            controllerAs: 'ctrl',
+            templateUrl: 'views/notAuthorized.html'
+        });
     })
 
     .factory('ResourceFactory', ['$resource', function($resource) {
@@ -62,6 +76,11 @@ const app = angular.module("app", ['ui.router', 'ngResource', 'ngCookies', 'ngTo
                 createUser: {
                     method: 'POST',
                     url: '/createUser'
+                },
+                isAdmin: {
+                    method: 'GET',
+                    isArray: false,
+                    url: '/isAdmin'
                 }
             }
         );

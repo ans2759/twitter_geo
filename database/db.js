@@ -3,6 +3,7 @@
  */
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
+const boundingInfo = require('../twitter/defaultTwitterParams').boundingInfo;
 
 const url = 'mongodb://localhost:27017';
 
@@ -206,4 +207,45 @@ function buildUserObject(twitterUser) {
         isAdmin: false
     }
 }
+
+exports.getBoundingInfo = function() {
+    return new Promise(function (resolve, reject) {
+        MongoClient.connect(url).then(function(client) {
+            const db = client.db(dbName);
+            db.collection('twitter').findOne({}, function (err, result) {
+                if (err !== null) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            })
+        });
+    });
+};
+
+exports.initData = function() {
+    return new Promise(function (resolve, reject) {
+        MongoClient.connect(url).then(function(client) {
+            const db = client.db(dbName);
+            db.collection('twitter').findOne({}, function (err, result) {
+                if (err !== null) {
+                    reject(err);
+                } else {
+                    if (result === null) {
+                        db.collection('twitter').insertOne(boundingInfo, function(err, result) {
+                            if (err !== null) {
+                                reject(err);
+                            } else {
+                                console.log("Default bounding info inserted")
+                                resolve();
+                            }
+                        })
+                    } else {
+                        resolve();
+                    }
+                }
+            })
+        });
+    });
+};
 

@@ -93,5 +93,6 @@ app.use(function(err, req, res, next) {
 // stopWords.load();
 db.buildIndex();
 // tweetCacther.catchTweets();
+db.initData();
 
 module.exports = app;
