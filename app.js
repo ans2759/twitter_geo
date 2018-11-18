@@ -91,6 +91,7 @@ app.use(function(err, req, res, next) {
 
 // db.connect();
 // stopWords.load();
+db.createIndexes();
 db.buildIndex();
 // tweetCacther.catchTweets();
 db.initData();

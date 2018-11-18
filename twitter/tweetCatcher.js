@@ -57,6 +57,13 @@ exports.getCenter = function () {
     };
 };
 
+exports.getNewCenter = function(lowerLeftLat, lowerLeftLng, upperRightLat, upperRightLng) {
+    return {
+        lat: calcMiddle(parseFloat(upperRightLat), parseFloat(lowerLeftLat)),
+        lng: calcMiddle(parseFloat(upperRightLng), parseFloat(lowerLeftLng))
+    }
+};
+
 const calcMiddle = function(upper, lower) {
     return parseFloat((((upper - lower) / 2) + lower).toFixed(3));
 };

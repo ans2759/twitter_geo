@@ -11,18 +11,20 @@
         let lng;
 
         _this.initMap = function() {
-            if (!map) {
                 ResourceFactory.getCoordinates({}, function (res) {
-                    lat = res.lat;
-                    lng = res.lng;
-                    map = new google.maps.Map(document.getElementById('map'), {
-                        center: {lat: res.lat, lng: res.lng},
-                        zoom: 11
-                    });
+                    if (!map) {
+                        lat = res.lat;
+                        lng = res.lng;
+                        map = new google.maps.Map(document.getElementById('map'), {
+                            center: {lat: res.lat, lng: res.lng},
+                            zoom: 11
+                        });
+                    } else {
+                        map.setCenter({lat: res.lat, lng: res.lng});
+                    }
                 }, function (err) {
                     console.error("Error retrieving coordinates", err)
                 });
-            }
         };
 
         _this.addTweets = function(tweets) {
@@ -32,6 +34,27 @@
                     _this.addMarker(tweet);
                 }
             })
+        };
+
+        _this.setCenter = function(lat, lng) {
+            _this.deleteMarkers();
+            if (!map) {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: lat, lng: lng},
+                    zoom: 11
+                });
+            }
+
+            const myLatlng = new google.maps.LatLng(lat, lng);
+            const marker = new google.maps.Marker({
+                position: myLatlng,
+                title: "Center"
+            });
+
+            marker.setMap(map);
+            markers.push(marker);
+
+            map.setCenter(marker.getPosition());
         };
 
         _this.addMarker = function(tweet, recenter) {

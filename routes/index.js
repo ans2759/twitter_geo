@@ -19,7 +19,6 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/home', cel.ensureLoggedIn(), function (req, res, next) {
-
     console.log('Sending home page');
     res.sendFile('index.html', {root: './public/views'})
 });
@@ -102,7 +101,6 @@ router.get('/word', cel.ensureLoggedIn(),  function (req, res, next) {
 });
 
 router.get('/common-words', cel.ensureLoggedIn(), function (req, res, next) {
-
     console.log('Sending common words');
     res.json(db.commonWords)
 });
@@ -119,6 +117,41 @@ router.get('/getBoundingInfo', cel.ensureLoggedIn(), function (req, res, next) {
         res.json(data);
     })
 });
+
+router.get('/getcenter', cel.ensureLoggedIn(), function (req, res, next) {
+    console.log('Calculating new center');
+    res.json(tweetCatcher.getNewCenter(req.query.lowerLeftLat, req.query.lowerLeftLng,
+        req.query.upperRightLat, req.query.upperRightLng));
+});
+
+router.get('/getUsers', cel.ensureLoggedIn(), isAdmin(), function (req, res, next) {
+    console.log("Getting users");
+    db.getUsers(req.query.user).then(function(users) {
+        res.json(users);
+    });
+});
+
+router.delete('/deleteUser', cel.ensureLoggedIn(), isAdmin(), function(req, res, next) {
+    console.log("Deleting User");
+    db.deleteUser(req.query.id).then(function(data) {
+        if (data.deletedCount > 0) {
+            res.status(200).send("Successfully deleted");
+        } else {
+            res.status(500).send("Error deleting user");
+        }
+    });
+});
+
+router.put('/changeAdminStatus', cel.ensureLoggedIn(), isAdmin(), function(req, res, next) {
+    console.log("Changing admin status to : " + req.query.isAdmin);
+    db.changeAdminStatus(req.body.id, req.body.isAdmin).then(function(data) {
+        if (data.modifiedCount > 0) {
+            res.status(200).send("Successfully updated");
+        } else {
+            res.status(500).send("Error changing status of user");
+        }
+    });
+});
 /**
  * *****************************End Admin Routes
  */
@@ -132,5 +165,17 @@ router.get('/coordinates', cel.ensureLoggedIn(), function(req, res, next) {
 /**
  * *****************************End Common Routes
  */
+
+function isAdmin() {
+    return function(req, res, next) {
+        db.isAdmin(req.user.id).then(function(isAdmin) {
+            if (isAdmin) {
+                next();
+            } else {
+                res.status(400).send("Unauthorized");
+            }
+        });
+    }
+}
 
 module.exports = router;

@@ -81,6 +81,31 @@ const app = angular.module("app", ['ui.router', 'ngResource', 'ngCookies', 'ngTo
                     method: 'GET',
                     isArray: false,
                     url: '/isAdmin'
+                },
+                getBoundingInfo: {
+                    method: 'GET',
+                    isArray: false,
+                    url: '/getBoundingInfo'
+                },
+                getCenter: {
+                    method: 'GET',
+                    isArray: false,
+                    url: 'getCenter'
+                },
+                getUsers: {
+                    method: 'GET',
+                    isArray: true,
+                    url: '/getUsers'
+                },
+                deleteUser: {
+                    method: 'DELETE',
+                    isArray: false,
+                    url: '/deleteUser'
+                },
+                changeAdminStatus: {
+                    method: 'PUT',
+                    isArray: false,
+                    url: '/changeAdminStatus'
                 }
             }
         );

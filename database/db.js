@@ -1,7 +1,8 @@
 /**
  * Created by alexs on 2/11/2018.
  */
-const MongoClient = require('mongodb').MongoClient;
+const MongoDb = require('mongodb');
+const MongoClient = MongoDb.MongoClient;
 const assert = require('assert');
 const boundingInfo = require('../twitter/defaultTwitterParams').boundingInfo;
 
@@ -154,13 +155,7 @@ exports.getTweets = function(word) {
                             $in: tweetIds.tweets
                         }
                     }).toArray(function (err, data) {
-                        if (err !== null) {
-                            client.close();
-                            reject(err)
-                        } else {
-                            client.close();
-                            resolve(data);
-                        }
+                        closeAndResolve(resolve, reject, client, err, data);
                     })
                 }
             });
@@ -173,12 +168,29 @@ exports.getUser = function(userId) {
         MongoClient.connect(url).then(function(client) {
             const db = client.db(dbName);
             db.collection('users').findOne({userId: userId}, function(err, user) {
-                client.close();
-                if (err !== null) {
-                    reject(err);
-                } else {
-                    resolve(user);
-                }
+                closeAndResolve(resolve, reject, client, err, user);
+            });
+        });
+    });
+};
+
+exports.isAdmin = function(userId) {
+    return new Promise(function (resolve, reject) {
+        MongoClient.connect(url).then(function(client) {
+            const db = client.db(dbName);
+            db.collection('users').findOne({userId: userId}, function(err, user) {
+                closeAndResolve(resolve, reject, client, err, user.isAdmin);
+            });
+        });
+    });
+};
+
+exports.getUsers = function(searchTerm) {
+    return new Promise(function (resolve, reject) {
+        MongoClient.connect(url).then(function(client) {
+            const db = client.db(dbName);
+            db.collection('users').find({}).toArray(function(err, users) {
+                closeAndResolve(resolve, reject, client, err, users);
             });
         });
     });
@@ -189,35 +201,40 @@ exports.createUser = function(user) {
         MongoClient.connect(url).then(function(client) {
             const db = client.db(dbName);
             db.collection('users').insertOne(buildUserObject(user), function (err, result) {
-                if (err !== null) {
-                    reject(err);
-                } else {
-                    resolve(result);
-                }
+                closeAndResolve(resolve, reject, client, err, result);
             })
         });
     });
 };
 
-function buildUserObject(twitterUser) {
-    return {
-        userId: twitterUser.id,
-        username: twitterUser.username,
-        displayName: twitterUser.displayName,
-        isAdmin: false
-    }
-}
+exports.deleteUser = function(id) {
+    return new Promise(function (resolve, reject) {
+        MongoClient.connect(url).then(function(client) {
+            const db = client.db(dbName);
+            db.collection('users').deleteOne({_id: MongoDb.ObjectId(id)}, function (err, result) {
+                closeAndResolve(resolve, reject, client, err, result);
+            })
+        });
+    });
+};
+
+exports.changeAdminStatus = function(id, isAdmin) {
+    return new Promise(function (resolve, reject) {
+        MongoClient.connect(url).then(function(client) {
+            const db = client.db(dbName);
+            db.collection('users').updateOne({_id: MongoDb.ObjectId(id)}, {$set: {isAdmin: isAdmin}}, function (err, result) {
+                closeAndResolve(resolve, reject, client, err, result);
+            })
+        });
+    });
+};
 
 exports.getBoundingInfo = function() {
     return new Promise(function (resolve, reject) {
         MongoClient.connect(url).then(function(client) {
             const db = client.db(dbName);
             db.collection('twitter').findOne({}, function (err, result) {
-                if (err !== null) {
-                    reject(err);
-                } else {
-                    resolve(result);
-                }
+                closeAndResolve(resolve, reject, client, err, result);
             })
         });
     });
@@ -229,18 +246,21 @@ exports.initData = function() {
             const db = client.db(dbName);
             db.collection('twitter').findOne({}, function (err, result) {
                 if (err !== null) {
+                    client.close();
                     reject(err);
                 } else {
                     if (result === null) {
                         db.collection('twitter').insertOne(boundingInfo, function(err, result) {
+                            client.close();
                             if (err !== null) {
                                 reject(err);
                             } else {
-                                console.log("Default bounding info inserted")
+                                console.log("Default bounding info inserted");
                                 resolve();
                             }
-                        })
+                        });
                     } else {
+                        client.close();
                         resolve();
                     }
                 }
@@ -248,4 +268,32 @@ exports.initData = function() {
         });
     });
 };
+
+exports.createIndexes = function() {
+    MongoClient.connect(url).then(function(client) {
+        const db = client.db(dbName);
+        db.collection('users').createIndex({userId: 1});
+        db.collection('users').createIndex({username: 1});
+        db.collection('users').createIndex({displayName: 1});
+        client.close();
+    });
+};
+
+function closeAndResolve(resolve, reject, client, err, data) {
+    client.close();
+    if (err !== null) {
+        reject(err);
+    } else {
+        resolve(data);
+    }
+}
+
+function buildUserObject(twitterUser) {
+    return {
+        userId: twitterUser.id,
+        username: twitterUser.username,
+        displayName: twitterUser.displayName,
+        isAdmin: false
+    }
+}
 

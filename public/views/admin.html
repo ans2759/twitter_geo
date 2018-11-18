@@ -1,0 +1,73 @@
+<div class="row">
+    <div class="col-6">
+        <h4>Bounding Box Coordinates: </h4>
+    </div>
+</div>
+<form>
+    <div class="form-group row">
+
+        <div class="col-2">
+            <h5>Lower Left Corner:</h5>
+        </div>
+        <label for="lowerLeftLat" class="col-1 col-form-label">Latitude:</label>
+        <div class="col-1">
+            <input type="text" class="form-control" id="lowerLeftLat" data-ng-model="ctrl.boundingInfo.lowerLeft.lat">
+        </div>
+
+        <label for="lowerLeftLng" class="col-1 col-form-label">Longitude:</label>
+        <div class="col-1">
+            <input type="text" class="form-control" id="lowerLeftLng" data-ng-model="ctrl.boundingInfo.lowerLeft.lng">
+        </div>
+
+    </div>
+
+    <div class="form-group row">
+
+        <div class="col-2">
+            <h5>Upper Right Corner:</h5>
+        </div>
+        <label for="lowerLeftLat" class="col-1 col-form-label">Latitude:</label>
+        <div class="col-1">
+            <input type="text" class="form-control" id="upperRightLat" data-ng-model="ctrl.boundingInfo.upperRight.lat">
+        </div>
+
+        <label for="lowerLeftLng" class="col-1 col-form-label">Longitude:</label>
+        <div class="col-1">
+            <input type="text" class="form-control" id="upperRightLng" data-ng-model="ctrl.boundingInfo.upperRight.lng">
+        </div>
+
+    </div>
+
+    <div class="form-group row">
+        <div class="col">
+            <button type="submit"
+                    class="btn btn-primary"
+                    data-toggle="modal"
+                    data-target="#exampleModal"
+                    data-ng-click="ctrl.showCenter()"
+                    data-ng-disabled="!ctrl.boundingInfo.lowerLeft"
+            >Show Center</button>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+    <div class="col-6">
+        <h4>Users: </h4>
+        <div class="form-group">
+            <label for="userSearch">Search users</label>
+            <input id="userSearch" type="text" data-ng-model="ctrl.userSearch">
+        </div>
+        <ul class="list-group">
+           <li class="list-group-item"
+               data-ng-repeat="user in ctrl.users | filter: ctrl.filterUsers"
+           >
+               {{user.username}} | {{user.displayName}}
+               <button type="button" class="btn btn-warning btn-sm" data-ng-if="!user.isAdmin" data-ng-click="ctrl.changeAdminStatus(user)">Make administrator</button>
+               <button type="button" class="btn btn-warning btn-sm" data-ng-if="user.isAdmin" data-ng-click="ctrl.changeAdminStatus(user)">Remove Admin status</button>
+               <button type="button" class="btn btn-danger btn-sm" data-ng-click="ctrl.deleteUser(user)">Delete User</button>
+           </li>
+        </ul>
+    </div>
+</div>
+<toast></toast>
