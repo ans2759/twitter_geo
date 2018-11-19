@@ -269,6 +269,22 @@ exports.initData = function() {
     });
 };
 
+exports.updateBoundingInfo = function(boundingInfo) {
+    return new Promise(function (resolve, reject) {
+        MongoClient.connect(url).then(function(client) {
+            const db = client.db(dbName);
+            db.collection('twitter').updateOne({}, {
+                $set: {
+                    lowerLeft: {lat: boundingInfo.lowerLeft.lat, lng: boundingInfo.lowerLeft.lng},
+                    upperRight: {lat: boundingInfo.upperRight.lat, lng: boundingInfo.upperRight.lng}
+                }
+            }, function(err, result) {
+                closeAndResolve(resolve, reject, client, err, result);
+            });
+        });
+    });
+};
+
 exports.createIndexes = function() {
     MongoClient.connect(url).then(function(client) {
         const db = client.db(dbName);
@@ -282,6 +298,7 @@ exports.createIndexes = function() {
 function closeAndResolve(resolve, reject, client, err, data) {
     client.close();
     if (err !== null) {
+        console.error("Error encountered", err);
         reject(err);
     } else {
         resolve(data);

@@ -4,6 +4,7 @@ const db = require('../database/db');
 const tweetCatcher = require('../twitter/tweetCatcher');
 const passport = require('passport');
 const cel = require('connect-ensure-login');
+const latLngRegex = new RegExp("^-?[0-9]{1,3}\\.[0-9]{1,3}$");
 
 
 /**
@@ -152,6 +153,56 @@ router.put('/changeAdminStatus', cel.ensureLoggedIn(), isAdmin(), function(req, 
         }
     });
 });
+
+router.put('/updateCorners', cel.ensureLoggedIn(), isAdmin(), function(req, res, next) {
+    console.log('Updating bounding info');
+    if (isValidLatitude(req.body.boundingInfo.lowerLeft.lat) && isValidLatitude(req.body.boundingInfo.upperRight.lat) &&
+        isValidLongitude(req.body.boundingInfo.lowerLeft.lng) && isValidLongitude(req.body.boundingInfo.upperRight.lng)) {
+        db.updateBoundingInfo(req.body.boundingInfo).then(function (data) {
+            if (data.modifiedCount > 0) {
+                res.status(200).send("Successfully updated");
+            } else {
+                res.status(500).send("bounding info not modified");
+            }
+        })
+    } else {
+        res.status(400).send("Invalid bounding info");
+    }
+});
+
+router.get('/streamConnected', cel.ensureLoggedIn(), isAdmin(), function(req, res, next) {
+    console.log('Is Stream connected?');
+    res.json({connected: tweetCatcher.TweetCatcher.getInstance().isConnected()})
+});
+
+router.put('/connectStream', cel.ensureLoggedIn(), isAdmin(), function(req, res, next) {
+    console.log('Connecting Stream');
+    if(tweetCatcher.TweetCatcher.getInstance().isConnected()) {
+        res.status(400).send("Stream already connected");
+    } else {
+        try {
+            tweetCatcher.TweetCatcher.getInstance().catchTweets();
+        } catch(err) {
+            console.error("Error starting twitter stream", err);
+        }
+        res.status(200).send("Starting connection")
+    }
+    res.json({connected: tweetCatcher.TweetCatcher.getInstance().isConnected()})
+});
+
+router.put('/closeStream', cel.ensureLoggedIn(), isAdmin(), function(req, res, next) {
+    console.log("Closing stream");
+    if(!tweetCatcher.TweetCatcher.getInstance().isConnected()) {
+        res.status(400).send("Stream not connected");
+    } else {
+        try {
+            tweetCatcher.TweetCatcher.getInstance().close();
+        } catch(err) {
+            console.error("Error closing twitter stream", err);
+        }
+        res.status(200).send("Closing connection")
+    }
+});
 /**
  * *****************************End Admin Routes
  */
@@ -166,6 +217,9 @@ router.get('/coordinates', cel.ensureLoggedIn(), function(req, res, next) {
  * *****************************End Common Routes
  */
 
+/**
+ * *****************************Utility functions
+ */
 function isAdmin() {
     return function(req, res, next) {
         db.isAdmin(req.user.id).then(function(isAdmin) {
@@ -177,5 +231,16 @@ function isAdmin() {
         });
     }
 }
+
+function isValidLatitude(val) {
+    return  val !== null && val !== '' && latLngRegex.test(val) && parseFloat(val) <= 90;
+}
+
+function isValidLongitude(val) {
+    return val !== null && val !== '' && latLngRegex.test(val) && parseFloat(val) <= 180;
+}
+/**
+ * *****************************End Utility functions
+ */
 
 module.exports = router;

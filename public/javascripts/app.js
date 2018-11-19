@@ -106,6 +106,26 @@ const app = angular.module("app", ['ui.router', 'ngResource', 'ngCookies', 'ngTo
                     method: 'PUT',
                     isArray: false,
                     url: '/changeAdminStatus'
+                },
+                updateCorners: {
+                    method: 'PUT',
+                    isArray: false,
+                    url: '/updateCorners'
+                },
+                streamConnected: {
+                    method: 'GET',
+                    isArray: false,
+                    url: '/streamConnected'
+                },
+                connectStream: {
+                    method: 'PUT',
+                    isArray: false,
+                    url: '/connectStream'
+                },
+                closeStream: {
+                    method: 'PUT',
+                    isArray: false,
+                    url: '/closeStream'
                 }
             }
         );

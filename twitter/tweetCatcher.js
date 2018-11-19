@@ -16,37 +16,72 @@ const Twitter = require('twitter')
     access_token_secret: APIKeys.access_token_secret
 });
 
-let counter = 0;
+const TweetCatcher = (function() {
+    let instance;
+    let connected = false;
+    let counter = 0;
 
-exports.catchTweets = function() {
-    MongoClient.connect('mongodb://localhost:27017/test', function(err, client) {
-        assert.equal(null, err);
-        console.log('Connected to DB for tweet storage');
+    function init() {
+        let streamReference;
 
-        const db = client.db('test');
-        const collection = db.collection('testtweets');
-
-        const stream = twitterClient.stream('statuses/filter',{ locations: lonLat });
-
-        stream.on('data', function (tweet) {
-            if(tweet.geo !== null) {
-                console.log('tweet received');
-                collection.insertOne(tweet, function(err, r) {
+        return {
+            catchTweets: function() {
+                MongoClient.connect('mongodb://localhost:27017/test', function (err, client) {
                     assert.equal(null, err);
-                    console.log('tweet stored: ' + ++counter);
-                });
-            } else {
-                console.error('bad data received: ' + tweet);
-            }
-        });
+                    console.log('Connected to DB for tweet storage');
 
-        stream.on('error', function (err) {
-            console.log(' Twitter ERROR-----------: '+err);
-            client.close();
-            throw err;
-        });
-    });
-};
+                    const db = client.db('test');
+                    const collection = db.collection('testtweets');
+
+                    twitterClient.stream('statuses/filter', {locations: lonLat}, function(stream) {
+                        connected = true;
+                        streamReference = stream;
+
+                        stream.on('data', function (tweet) {
+                            if (tweet.geo !== null) {
+                                console.log('tweet received');
+                                collection.insertOne(tweet, function (err, r) {
+                                    assert.equal(null, err);
+                                    console.log('tweet stored: ' + ++counter);
+                                });
+                            } else {
+                                console.error('bad data received: ' + tweet);
+                            }
+                        });
+
+                        stream.on('error', function (err) {
+                            console.log(' Twitter ERROR-----------: ' + err);
+                            client.close();
+                            connected = false;
+                            throw err;
+                        });
+                    });
+                });
+            },
+            isConnected: function() {
+                return connected;
+            },
+            getCount: function() {
+                return counter;
+            },
+            close: function() {
+                if (streamReference) {
+                    streamReference.destroy();
+                }
+            }
+        }
+    }
+
+    return {
+        getInstance: function() {
+            if (!instance) {
+                instance = init();
+            }
+            return instance;
+        }
+    }
+})();
+exports.TweetCatcher = TweetCatcher;
 
 exports.getCenter = function () {
     const lower = lowerLeft.split(',');
