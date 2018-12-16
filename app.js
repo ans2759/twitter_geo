@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const Strategy = require('passport-twitter').Strategy;
 const APIKeys = require('./secure/twitterAccess');
+const { fork } = require('child_process');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
@@ -89,11 +90,26 @@ app.use(function(err, req, res, next) {
     res.render('error');
 });
 
-// db.connect();
 // stopWords.load();
 db.createIndexes();
-db.buildIndex();
 // tweetCacther.catchTweets();
 db.initData();
+// const child = cp.fork(__dirname + '/db/indexBuilder.js');
+const child = fork('./database/indexBuilder.js', {execArgv: ['--inspect']});
+child.send("Start");
+
+child.on('message', (m) => {
+    console.log('PARENT got message:', m);
+});
+
+child.on('error', (e) => {
+    console.log('Error:', e);
+});
+
+child.on('exit', function (code, signal) {
+    console.log('child process exited with ' +
+        `code ${code} and signal ${signal}`);
+});
+
 
 module.exports = app;

@@ -4,7 +4,7 @@
 (function () {
     'use strict';
     const app = angular.module('app');
-    const AdminCtrl = function (ResourceFactory, $state, map, ngToast) {
+    const AdminCtrl = function (ResourceFactory, $state, map, ngToast, StreamConnected, MessageBus) {
         console.log("AdminCtrl init");
 
         const _this = this;
@@ -33,6 +33,10 @@
         });
 
         function initPage() {
+            MessageBus.subscribe(MessageBus.events.CONNECTION_UPDATE, (event, data) => {
+                _this.streamConnected = data.connected;
+            });
+            StreamConnected.startPolling();
             _this.getBoundingInfo();
             _this.getUsers();
             _this.isStreamConnected();
@@ -155,9 +159,7 @@
         };
 
         _this.isStreamConnected = function() {
-            ResourceFactory.streamConnected({}, function (response) {
-                _this.streamConnected = response.connected;
-            });
+            _this.streamConnected = StreamConnected.isStreamConnected();
         };
 
         _this.connectStream = function() {
@@ -176,6 +178,6 @@
             });
         }
     };
-    AdminCtrl.$inject = ['ResourceFactory', '$state', 'map', 'ngToast'];
+    AdminCtrl.$inject = ['ResourceFactory', '$state', 'map', 'ngToast', 'StreamConnected', 'MessageBus'];
     app.controller('AdminCtrl', AdminCtrl);
 }());

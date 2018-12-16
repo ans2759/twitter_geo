@@ -1,7 +1,10 @@
 <div>
     <toast></toast>
     <h1>Twitter Geo</h1>
-    <div data-ng-repeat="word in ctrl.words">
+    <label for="wordSearch">Filter: </label>
+    <input type="text" id="wordSearch" data-ng-model="ctrl.wordSearch"/>
+    <div data-ng-repeat="word in ctrl.words | orderBy : '-count' | filter: ctrl.wordSearch">
         <a ui-sref="word({word: word.word})">{{word.word}}</a>
+        <p class="d-inline">({{word.count}})</p>
     </div>
 </div>

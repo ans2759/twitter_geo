@@ -20,6 +20,7 @@ const TweetCatcher = (function() {
     let instance;
     let connected = false;
     let counter = 0;
+    let globalClient;
 
     function init() {
         let streamReference;
@@ -27,6 +28,7 @@ const TweetCatcher = (function() {
         return {
             catchTweets: function() {
                 MongoClient.connect('mongodb://localhost:27017/test', function (err, client) {
+                    globalClient = client;
                     assert.equal(null, err);
                     console.log('Connected to DB for tweet storage');
 
@@ -40,19 +42,18 @@ const TweetCatcher = (function() {
                         stream.on('data', function (tweet) {
                             if (tweet.geo !== null) {
                                 console.log('tweet received');
+                                tweet.timestamp_ms = parseInt(tweet.timestamp_ms);
                                 collection.insertOne(tweet, function (err, r) {
                                     assert.equal(null, err);
                                     console.log('tweet stored: ' + ++counter);
                                 });
-                            } else {
-                                console.error('bad data received: ' + tweet);
                             }
                         });
 
                         stream.on('error', function (err) {
                             console.log(' Twitter ERROR-----------: ' + err);
-                            client.close();
                             connected = false;
+                            client.close();
                             throw err;
                         });
                     });
@@ -65,6 +66,10 @@ const TweetCatcher = (function() {
                 return counter;
             },
             close: function() {
+                connected = false;
+                if (globalClient) {
+                    globalClient.close();
+                }
                 if (streamReference) {
                     streamReference.destroy();
                 }

@@ -103,7 +103,9 @@ router.get('/word', cel.ensureLoggedIn(),  function (req, res, next) {
 
 router.get('/common-words', cel.ensureLoggedIn(), function (req, res, next) {
     console.log('Sending common words');
-    res.json(db.commonWords)
+    db.getIndex().then(function (words) {
+        res.json(words);
+    })
 });
 /**
  * *****************************End Word Routes
