@@ -4,42 +4,68 @@
 const MongoDb = require('mongodb');
 const MongoClient = MongoDb.MongoClient;
 const boundingInfo = require('../twitter/defaultTwitterParams').boundingInfo;
+const myCache = require('../utils/serviceCache');
 
 const URL = 'mongodb://localhost:27017';
+const INDEXED_WORDS = 'indexedWords';
+const TWEET_CACHE_PREFIX = 'TWEET_CACHE_';
+const USER_PREFIX = 'USER_';
 
 exports.url = URL;
 const DB_NAME = 'test';
 exports.dbName = DB_NAME;
 
+function getIndexFromDb(resolve, reject) {
+    MongoClient.connect(URL).then(function (client) {
+        const db = client.db(DB_NAME);
+        db.collection('indexedwords').find({count: {$gt: 9}}).toArray(function (err, words) {
+            myCache.set(INDEXED_WORDS, words);
+            closeAndResolve(resolve, reject, client, err, words);
+        });
+    });
+}
+
 exports.getIndex = function() {
     return new Promise(function(resolve, reject) {
-        MongoClient.connect(URL).then(function(client) {
-            const db = client.db(DB_NAME);
-            db.collection('indexedwords').find({count: {$gt: 9}}).toArray(function(err, words) {
-                closeAndResolve(resolve, reject, client, err, words);
-            });
+        myCache.get(INDEXED_WORDS).then((indexedWords) => {
+            if (indexedWords) {
+                resolve(indexedWords)
+            } else {
+                getIndexFromDb(resolve, reject);
+            }
         });
     })
 };
 
+function getTweetsFromDb(word, reject, resolve) {
+    MongoClient.connect(URL).then(function (client) {
+        const db = client.db(DB_NAME);
+        db.collection('indexedwords').findOne({word: word}, function (err, tweetIds) {
+            if (err !== null) {
+                client.close();
+                reject(err);
+            } else {
+                db.collection('testtweets').find({
+                    _id: {
+                        $in: tweetIds.tweets
+                    }
+                }).toArray(function (err, data) {
+                    myCache.set(TWEET_CACHE_PREFIX + word, data);
+                    closeAndResolve(resolve, reject, client, err, data);
+                })
+            }
+        });
+    });
+}
+
 exports.getTweets = function(word) {
     return new Promise(function(resolve, reject) {
-        MongoClient.connect(URL).then(function(client) {
-            const db = client.db(DB_NAME);
-            db.collection('indexedwords').findOne({word: word}, function(err, tweetIds) {
-                if (err !== null) {
-                    client.close();
-                    reject(err);
-                } else {
-                    db.collection('testtweets').find({
-                        _id: {
-                            $in: tweetIds.tweets
-                        }
-                    }).toArray(function (err, data) {
-                        closeAndResolve(resolve, reject, client, err, data);
-                    })
-                }
-            });
+        myCache.get(TWEET_CACHE_PREFIX + word).then((tweets) => {
+            if (tweets) {
+                resolve(tweets)
+            } else {
+                getTweetsFromDb(word, reject, resolve);
+            }
         });
     })
 };
@@ -49,6 +75,7 @@ exports.getUser = function(userId) {
         MongoClient.connect(URL).then(function(client) {
             const db = client.db(DB_NAME);
             db.collection('users').findOne({userId: userId}, function(err, user) {
+                myCache.set(USER_PREFIX + userId, user, 600);
                 closeAndResolve(resolve, reject, client, err, user);
             });
         });
@@ -57,11 +84,12 @@ exports.getUser = function(userId) {
 
 exports.isAdmin = function(userId) {
     return new Promise(function (resolve, reject) {
-        MongoClient.connect(URL).then(function(client) {
-            const db = client.db(DB_NAME);
-            db.collection('users').findOne({userId: userId}, function(err, user) {
-                closeAndResolve(resolve, reject, client, err, user.isAdmin);
-            });
+        myCache.get(USER_PREFIX + userId).then((user) => {
+            if (user) {
+                resolve(user.isAdmin)
+            } else {
+                exports.getUser(userId).then((user) => resolve(user.isAdmin));
+            }
         });
     });
 };
