@@ -184,12 +184,11 @@ router.put('/connectStream', cel.ensureLoggedIn(), isAdmin(), function(req, res,
     } else {
         try {
             tweetCatcher.TweetCatcher.getInstance().catchTweets();
+            res.status(200).send("Starting connection")
         } catch(err) {
             console.error("Error starting twitter stream", err);
         }
-        res.status(200).send("Starting connection")
     }
-    res.json({connected: tweetCatcher.TweetCatcher.getInstance().isConnected()})
 });
 
 router.put('/closeStream', cel.ensureLoggedIn(), isAdmin(), function(req, res, next) {

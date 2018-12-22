@@ -27,34 +27,38 @@ const TweetCatcher = (function() {
 
         return {
             catchTweets: function() {
-                MongoClient.connect('mongodb://localhost:27017/test', function (err, client) {
-                    globalClient = client;
-                    assert.equal(null, err);
-                    console.log('Connected to DB for tweet storage');
+                new Promise((resolve, reject) => {
+                    MongoClient.connect('mongodb://localhost:27017/test', function (err, client) {
+                        globalClient = client;
+                        assert.equal(null, err);
+                        console.log('Connected to DB for tweet storage');
 
-                    const db = client.db('test');
-                    const collection = db.collection('testtweets');
+                        const db = client.db('test');
+                        const collection = db.collection('testtweets');
 
-                    twitterClient.stream('statuses/filter', {locations: lonLat}, function(stream) {
-                        connected = true;
-                        streamReference = stream;
+                        twitterClient.stream('statuses/filter', {locations: lonLat}, function(stream) {
+                            resolve();
+                            connected = true;
+                            streamReference = stream;
 
-                        stream.on('data', function (tweet) {
-                            if (tweet.geo !== null) {
-                                console.log('tweet received');
-                                tweet.timestamp_ms = parseInt(tweet.timestamp_ms);
-                                collection.insertOne(tweet, function (err, r) {
-                                    assert.equal(null, err);
-                                    console.log('tweet stored: ' + ++counter);
-                                });
-                            }
-                        });
+                            stream.on('data', function (tweet) {
+                                if (tweet.geo !== null) {
+                                    console.log('tweet received');
+                                    tweet.timestamp_ms = parseInt(tweet.timestamp_ms);
+                                    collection.insertOne(tweet, function (err, r) {
+                                        assert.equal(null, err);
+                                        console.log('tweet stored: ' + ++counter);
+                                    });
+                                }
+                            });
 
-                        stream.on('error', function (err) {
-                            console.log(' Twitter ERROR-----------: ' + err);
-                            connected = false;
-                            client.close();
-                            throw err;
+                            stream.on('error', function (err) {
+                                reject();
+                                console.log(' Twitter ERROR-----------: ' + err);
+                                connected = false;
+                                client.close();
+                                throw err;
+                            });
                         });
                     });
                 });
