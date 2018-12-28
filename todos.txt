@@ -1,0 +1,6 @@
+---cache DB index
+reset zoom on map
+login screen layout
+---error when making call to connect stream
+error handling
+favicon

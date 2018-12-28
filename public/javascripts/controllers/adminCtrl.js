@@ -4,7 +4,7 @@
 (function () {
     'use strict';
     const app = angular.module('app');
-    const AdminCtrl = function (ResourceFactory, $state, map, ngToast, StreamConnected, MessageBus) {
+    const AdminCtrl = function (ResourceFactory, $state, map, ngToast, StreamConnected, MessageBus, FileUploader) {
         console.log("AdminCtrl init");
 
         const _this = this;
@@ -19,6 +19,11 @@
         _this.changeAdminAction = 'UPDATE_ADMIN';
         _this.deleteUserAction = 'DELETE_USER';
         _this.updateCornersAction = 'UPDATE_CORNERS';
+        _this.uploader = new FileUploader({
+            url: '/uploadStopWords',
+            removeAfterUpload: true,
+            queueLimit: 1
+        });
         let action = '';
         let selectedUser = {};
 
@@ -176,8 +181,8 @@
             }, function (error) {
                 ngToast.danger(error.data);
             });
-        }
+        };
     };
-    AdminCtrl.$inject = ['ResourceFactory', '$state', 'map', 'ngToast', 'StreamConnected', 'MessageBus'];
+    AdminCtrl.$inject = ['ResourceFactory', '$state', 'map', 'ngToast', 'StreamConnected', 'MessageBus', 'FileUploader'];
     app.controller('AdminCtrl', AdminCtrl);
 }());

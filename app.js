@@ -15,6 +15,7 @@ const users = require('./routes/users');
 const db = require('./database/db');
 const tweetCacther = require('./twitter/tweetCatcher');
 const stopWords = require('./twitter/stopWords');
+const fileUpload = require('express-fileupload');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(fileUpload());
 
 passport.use(new Strategy({
         consumerKey: APIKeys.consumer_key,
@@ -90,26 +92,25 @@ app.use(function(err, req, res, next) {
     res.render('error');
 });
 
-// stopWords.load();
 db.createIndexes();
-// tweetCacther.catchTweets();
 db.initData();
-// const child = cp.fork(__dirname + '/db/indexBuilder.js');
-const child = fork('./database/indexBuilder.js', {execArgv: ['--inspect']});
-child.send("Start");
 
-child.on('message', (m) => {
-    console.log('PARENT got message:', m);
+stopWords.load().then(() => {
+    const child = fork('./database/indexBuilder.js', {execArgv: ['--inspect']});
+    child.send("Start");
+
+    child.on('message', (m) => {
+        console.log('PARENT got message:', m);
+    });
+
+    child.on('error', (e) => {
+        console.log('Error:', e);
+    });
+
+    child.on('exit', function (code, signal) {
+        console.log('child process exited with ' +
+            `code ${code} and signal ${signal}`);
+    });
 });
-
-child.on('error', (e) => {
-    console.log('Error:', e);
-});
-
-child.on('exit', function (code, signal) {
-    console.log('child process exited with ' +
-        `code ${code} and signal ${signal}`);
-});
-
 
 module.exports = app;

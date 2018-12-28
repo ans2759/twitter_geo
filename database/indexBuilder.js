@@ -131,17 +131,12 @@ const getTweets = function (db, stopWordsList) {
 const buildStopWordList = function (db) {
     process.send("Building Stopwords");
     return new Promise(function (resolve, reject) {
-        let stopWords = [];
         const stopwords = db.collection('stopwords');
-        stopwords.find().each(function (err, word) {
+        stopwords.find().toArray(function (err, words) {
             if (err !== null) {
                 reject(err);
             } else {
-                if (word !== null) {
-                    stopWords.push(word.word);
-                } else {
-                    resolve(stopWords);
-                }
+                resolve(words);
             }
         });
     })

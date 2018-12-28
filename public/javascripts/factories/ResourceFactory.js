@@ -81,6 +81,11 @@
                     method: 'PUT',
                     isArray: false,
                     url: '/closeStream'
+                },
+                uploadStopWords: {
+                    method: 'POST',
+                    isArray: false,
+                    url: '/uploadStopWords'
                 }
             }
         );

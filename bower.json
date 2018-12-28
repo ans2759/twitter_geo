@@ -4,7 +4,8 @@
   "dependencies": {
     "bootstrap": "latest",
     "angular": "latest",
-    "angular-route": "latest"
+    "angular-route": "latest",
+    "angular-upload": "^1.0.12"
   },
   "resolutions": {
     "angular": "1.7.3",

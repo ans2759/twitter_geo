@@ -1,0 +1,204 @@
+{
+  "id": "2366002885",
+  "username": "AlexStucki1",
+  "displayName": "Alex Stucki",
+  "photos": [
+    {
+      "value": "https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png"
+    }
+  ],
+  "provider": "twitter",
+  "_raw": "{\"id\":2366002885,\"id_str\":\"2366002885\",\"name\":\"Alex Stucki\",\"screen_name\":\"AlexStucki1\",\"location\":\"\",\"description\":\"\",\"url\":null,\"entities\":{\"description\":{\"urls\":[]}},\"protected\":false,\"followers_count\":7,\"friends_count\":5,\"listed_count\":0,\"created_at\":\"Fri Feb 28 18:48:45 +0000 2014\",\"favourites_count\":0,\"utc_offset\":null,\"time_zone\":null,\"geo_enabled\":false,\"verified\":false,\"statuses_count\":110,\"lang\":\"en\",\"status\":{\"created_at\":\"Thu Sep 04 14:36:09 +0000 2014\",\"id\":507537604347056128,\"id_str\":\"507537604347056128\",\"text\":\"RT @TvFanClub: RT-to-Vote, #iOChoice :I Endorse @SukhSandhu as #BestIndwriter at http:\\/\\/t.co\\/Y9Mprt2KBD\",\"truncated\":false,\"entities\":{\"hashtags\":[{\"text\":\"iOChoice\",\"indices\":[27,36]},{\"text\":\"BestIndwriter\",\"indices\":[63,77]}],\"symbols\":[],\"user_mentions\":[{\"screen_name\":\"TvFanClub\",\"name\":\"Tv FanClub\",\"id\":1099685630,\"id_str\":\"1099685630\",\"indices\":[3,13]},{\"screen_name\":\"SukhSandhu\",\"name\":\"Sukh Sandhu\",\"id\":27457454,\"id_str\":\"27457454\",\"indices\":[48,59]}],\"urls\":[{\"url\":\"http:\\/\\/t.co\\/Y9Mprt2KBD\",\"expanded_url\":\"http:\\/\\/www.iOchoice.com\\/Awards\\/\",\"display_url\":\"iOchoice.com\\/Awards\\/\",\"indices\":[81,103]}]},\"source\":\"\\u003ca href=\\\"http:\\/\\/twitter.com\\\" rel=\\\"nofollow\\\"\\u003eTwitter Web Client\\u003c\\/a\\u003e\",\"in_reply_to_status_id\":null,\"in_reply_to_status_id_str\":null,\"in_reply_to_user_id\":null,\"in_reply_to_user_id_str\":null,\"in_reply_to_screen_name\":null,\"geo\":null,\"coordinates\":null,\"place\":null,\"contributors\":null,\"retweeted_status\":{\"created_at\":\"Thu Sep 04 05:05:33 +0000 2014\",\"id\":507394009140953088,\"id_str\":\"507394009140953088\",\"text\":\"RT-to-Vote, #iOChoice :I Endorse @SukhSandhu as #BestIndwriter at http:\\/\\/t.co\\/Y9Mprt2KBD\",\"truncated\":false,\"entities\":{\"hashtags\":[{\"text\":\"iOChoice\",\"indices\":[12,21]},{\"text\":\"BestIndwriter\",\"indices\":[48,62]}],\"symbols\":[],\"user_mentions\":[{\"screen_name\":\"SukhSandhu\",\"name\":\"Sukh Sandhu\",\"id\":27457454,\"id_str\":\"27457454\",\"indices\":[33,44]}],\"urls\":[{\"url\":\"http:\\/\\/t.co\\/Y9Mprt2KBD\",\"expanded_url\":\"http:\\/\\/www.iOchoice.com\\/Awards\\/\",\"display_url\":\"iOchoice.com\\/Awards\\/\",\"indices\":[66,88]}]},\"source\":\"\\u003ca href=\\\"https:\\/\\/dev.twitter.com\\/docs\\/tfw\\\" rel=\\\"nofollow\\\"\\u003eTwitter for Websites\\u003c\\/a\\u003e\",\"in_reply_to_status_id\":null,\"in_reply_to_status_id_str\":null,\"in_reply_to_user_id\":null,\"in_reply_to_user_id_str\":null,\"in_reply_to_screen_name\":null,\"geo\":null,\"coordinates\":null,\"place\":null,\"contributors\":null,\"is_quote_status\":false,\"retweet_count\":6377,\"favorite_count\":2740,\"favorited\":false,\"retweeted\":true,\"possibly_sensitive\":false,\"lang\":\"en\"},\"is_quote_status\":false,\"retweet_count\":6377,\"favorite_count\":0,\"favorited\":false,\"retweeted\":true,\"possibly_sensitive\":false,\"lang\":\"en\"},\"contributors_enabled\":false,\"is_translator\":false,\"is_translation_enabled\":false,\"profile_background_color\":\"C0DEED\",\"profile_background_image_url\":\"http:\\/\\/abs.twimg.com\\/images\\/themes\\/theme1\\/bg.png\",\"profile_background_image_url_https\":\"https:\\/\\/abs.twimg.com\\/images\\/themes\\/theme1\\/bg.png\",\"profile_background_tile\":false,\"profile_image_url\":\"http:\\/\\/abs.twimg.com\\/sticky\\/default_profile_images\\/default_profile_normal.png\",\"profile_image_url_https\":\"https:\\/\\/abs.twimg.com\\/sticky\\/default_profile_images\\/default_profile_normal.png\",\"profile_link_color\":\"1DA1F2\",\"profile_sidebar_border_color\":\"C0DEED\",\"profile_sidebar_fill_color\":\"DDEEF6\",\"profile_text_color\":\"333333\",\"profile_use_background_image\":true,\"has_extended_profile\":false,\"default_profile\":true,\"default_profile_image\":true,\"following\":false,\"follow_request_sent\":false,\"notifications\":false,\"translator_type\":\"none\",\"suspended\":false,\"needs_phone_verification\":false}",
+  "_json": {
+    "id": 2366002885,
+    "id_str": "2366002885",
+    "name": "Alex Stucki",
+    "screen_name": "AlexStucki1",
+    "location": "",
+    "description": "",
+    "url": null,
+    "entities": {
+      "description": {
+        "urls": []
+      }
+    },
+    "protected": false,
+    "followers_count": 7,
+    "friends_count": 5,
+    "listed_count": 0,
+    "created_at": "Fri Feb 28 18:48:45 +0000 2014",
+    "favourites_count": 0,
+    "utc_offset": null,
+    "time_zone": null,
+    "geo_enabled": false,
+    "verified": false,
+    "statuses_count": 110,
+    "lang": "en",
+    "status": {
+      "created_at": "Thu Sep 04 14:36:09 +0000 2014",
+      "id": 507537604347056100,
+      "id_str": "507537604347056128",
+      "text": "RT @TvFanClub: RT-to-Vote, #iOChoice :I Endorse @SukhSandhu as #BestIndwriter at http://t.co/Y9Mprt2KBD",
+      "truncated": false,
+      "entities": {
+        "hashtags": [
+          {
+            "text": "iOChoice",
+            "indices": [
+              27,
+              36
+            ]
+          },
+          {
+            "text": "BestIndwriter",
+            "indices": [
+              63,
+              77
+            ]
+          }
+        ],
+        "symbols": [],
+        "user_mentions": [
+          {
+            "screen_name": "TvFanClub",
+            "name": "Tv FanClub",
+            "id": 1099685630,
+            "id_str": "1099685630",
+            "indices": [
+              3,
+              13
+            ]
+          },
+          {
+            "screen_name": "SukhSandhu",
+            "name": "Sukh Sandhu",
+            "id": 27457454,
+            "id_str": "27457454",
+            "indices": [
+              48,
+              59
+            ]
+          }
+        ],
+        "urls": [
+          {
+            "url": "http://t.co/Y9Mprt2KBD",
+            "expanded_url": "http://www.iOchoice.com/Awards/",
+            "display_url": "iOchoice.com/Awards/",
+            "indices": [
+              81,
+              103
+            ]
+          }
+        ]
+      },
+      "source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+      "in_reply_to_status_id": null,
+      "in_reply_to_status_id_str": null,
+      "in_reply_to_user_id": null,
+      "in_reply_to_user_id_str": null,
+      "in_reply_to_screen_name": null,
+      "geo": null,
+      "coordinates": null,
+      "place": null,
+      "contributors": null,
+      "retweeted_status": {
+        "created_at": "Thu Sep 04 05:05:33 +0000 2014",
+        "id": 507394009140953100,
+        "id_str": "507394009140953088",
+        "text": "RT-to-Vote, #iOChoice :I Endorse @SukhSandhu as #BestIndwriter at http://t.co/Y9Mprt2KBD",
+        "truncated": false,
+        "entities": {
+          "hashtags": [
+            {
+              "text": "iOChoice",
+              "indices": [
+                12,
+                21
+              ]
+            },
+            {
+              "text": "BestIndwriter",
+              "indices": [
+                48,
+                62
+              ]
+            }
+          ],
+          "symbols": [],
+          "user_mentions": [
+            {
+              "screen_name": "SukhSandhu",
+              "name": "Sukh Sandhu",
+              "id": 27457454,
+              "id_str": "27457454",
+              "indices": [
+                33,
+                44
+              ]
+            }
+          ],
+          "urls": [
+            {
+              "url": "http://t.co/Y9Mprt2KBD",
+              "expanded_url": "http://www.iOchoice.com/Awards/",
+              "display_url": "iOchoice.com/Awards/",
+              "indices": [
+                66,
+                88
+              ]
+            }
+          ]
+        },
+        "source": "<a href=\"https://dev.twitter.com/docs/tfw\" rel=\"nofollow\">Twitter for Websites</a>",
+        "in_reply_to_status_id": null,
+        "in_reply_to_status_id_str": null,
+        "in_reply_to_user_id": null,
+        "in_reply_to_user_id_str": null,
+        "in_reply_to_screen_name": null,
+        "geo": null,
+        "coordinates": null,
+        "place": null,
+        "contributors": null,
+        "is_quote_status": false,
+        "retweet_count": 6377,
+        "favorite_count": 2740,
+        "favorited": false,
+        "retweeted": true,
+        "possibly_sensitive": false,
+        "lang": "en"
+      },
+      "is_quote_status": false,
+      "retweet_count": 6377,
+      "favorite_count": 0,
+      "favorited": false,
+      "retweeted": true,
+      "possibly_sensitive": false,
+      "lang": "en"
+    },
+    "contributors_enabled": false,
+    "is_translator": false,
+    "is_translation_enabled": false,
+    "profile_background_color": "C0DEED",
+    "profile_background_image_url": "http://abs.twimg.com/images/themes/theme1/bg.png",
+    "profile_background_image_url_https": "https://abs.twimg.com/images/themes/theme1/bg.png",
+    "profile_background_tile": false,
+    "profile_image_url": "http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png",
+    "profile_image_url_https": "https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png",
+    "profile_link_color": "1DA1F2",
+    "profile_sidebar_border_color": "C0DEED",
+    "profile_sidebar_fill_color": "DDEEF6",
+    "profile_text_color": "333333",
+    "profile_use_background_image": true,
+    "has_extended_profile": false,
+    "default_profile": true,
+    "default_profile_image": true,
+    "following": false,
+    "follow_request_sent": false,
+    "notifications": false,
+    "translator_type": "none",
+    "suspended": false,
+    "needs_phone_verification": false
+  },
+  "_accessLevel": "read-write"
+}

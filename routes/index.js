@@ -204,6 +204,22 @@ router.put('/closeStream', cel.ensureLoggedIn(), isAdmin(), function(req, res, n
         res.status(200).send("Closing connection")
     }
 });
+
+router.post('/uploadStopWords', cel.ensureLoggedIn(), isAdmin(), (req, res, next) => {
+    if (Object.keys(req.files).length === 0) {
+        return res.status(400).send('No files were uploaded.');
+    }
+
+    const stopWordsFile = req.files.file;
+
+    // Use the mv() method to place the file somewhere on your server
+    stopWordsFile.mv('../resources/stop-words.txt', function(err) {
+        if (err)
+            return res.status(500).send(err);
+
+        res.send('File uploaded!');
+    });
+});
 /**
  * *****************************End Admin Routes
  */

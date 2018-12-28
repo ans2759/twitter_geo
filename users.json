@@ -1,0 +1,20 @@
+[
+  {
+    "userId" : "2366002886",
+    "username" : "laurenStucki",
+    "displayName" : "Lauren Stucki",
+    "isAdmin" : false
+  },
+  {
+    "userId" : "2366002887",
+    "username" : "puppy1",
+    "displayName" : "Haley",
+    "isAdmin" : false
+  },
+  {
+    "userId" : "2366002886",
+    "username" : "EmmaBaby1",
+    "displayName" : "Emma Claire",
+    "isAdmin" : false
+  }
+]
