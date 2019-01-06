@@ -21,8 +21,7 @@
         _this.updateCornersAction = 'UPDATE_CORNERS';
         _this.uploader = new FileUploader({
             url: '/uploadStopWords',
-            removeAfterUpload: true,
-            queueLimit: 1
+            removeAfterUpload: true
         });
         let action = '';
         let selectedUser = {};
@@ -45,6 +44,29 @@
             _this.getBoundingInfo();
             _this.getUsers();
             _this.isStreamConnected();
+            initFileUpload();
+        }
+
+        const initFileUpload = () => {
+            //Limit upload queue to 1 item
+            _this.uploader.filters.push({
+                name: 'syncFilter',
+                fn: function(item, options) {
+                    if (this.queue.length > 0) {
+                        this.queue = [];
+                    }
+                    return true;
+                }
+            });
+
+            _this.uploader.onSuccessItem  = function(fileItem, response, status, headers) {
+                ngToast.success("Stop-words file uploaded successfully")
+            };
+
+            _this.uploader.onErrorItem = function(fileItem, response, status, headers) {
+                console.error("Error uploading stop-words", response);
+                ngToast.danger("Error uploading stop-words file: " + response.data);
+            };
         }
 
         _this.getBoundingInfo = function() {

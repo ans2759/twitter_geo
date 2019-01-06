@@ -12,7 +12,7 @@
                     streamConnected = response.connected;
                     MessageBus.publish(MessageBus.events.CONNECTION_UPDATE, {connected: streamConnected});
                 }
-                timer = $timeout(startPolling, 3000);
+                timer = $timeout(startPolling, 10000);
             });
         };
 

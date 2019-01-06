@@ -136,6 +136,7 @@ const buildStopWordList = function (db) {
             if (err !== null) {
                 reject(err);
             } else {
+                process.send("Built Stop-words list with length: " + words.length);
                 resolve(words);
             }
         });

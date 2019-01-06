@@ -130,8 +130,15 @@
 
 <div class="row">
     <div class="col">
+        <div nv-file-drop="" uploader="ctrl.uploader">
+            <div class="well my-drop-zone" nv-file-over data-uploader="ctrl.uploader">
+                Drop File here
+            </div>
+        </div>
+    </div>
+    <div class="col">
         <form>
-            <input type="file" nv-file-select uploader="ctrl.uploader"/><br/>
+            <input type="file" accept=".txt" nv-file-select uploader="ctrl.uploader"/><br/>
             <ul>
                 <li ng-repeat="item in ctrl.uploader.queue">
                     Name: <span ng-bind="item.file.name"></span><br/>

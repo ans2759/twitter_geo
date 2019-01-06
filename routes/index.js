@@ -5,6 +5,7 @@ const tweetCatcher = require('../twitter/tweetCatcher');
 const passport = require('passport');
 const cel = require('connect-ensure-login');
 const latLngRegex = new RegExp("^-?[0-9]{1,3}\\.[0-9]{1,3}$");
+const stopWords = require('../twitter/stopWords');
 
 
 /**
@@ -207,18 +208,26 @@ router.put('/closeStream', cel.ensureLoggedIn(), isAdmin(), function(req, res, n
 
 router.post('/uploadStopWords', cel.ensureLoggedIn(), isAdmin(), (req, res, next) => {
     if (Object.keys(req.files).length === 0) {
-        return res.status(400).send('No files were uploaded.');
+        res.status(400).send({data: 'No files were uploaded.'});
+    } else if (req.files.file.mimetype !== "text/plain") {
+        res.status(400).send({data: "Invalid file type"});
+    } else {
+        const stopWordsFile = req.files.file;
+
+        // Use the mv() method to place the file somewhere on your server
+        stopWordsFile.mv('./resources/stop-words.txt').then(function(err) {
+            if (err) {
+                res.status(500).send({data: err});
+            } else {
+                stopWords.load().then((err) => {
+                    if (err) {
+                        res.status(500).send({data: err});
+                    }
+                    res.status(200).send('File uploaded!');
+                });
+            }
+        });
     }
-
-    const stopWordsFile = req.files.file;
-
-    // Use the mv() method to place the file somewhere on your server
-    stopWordsFile.mv('../resources/stop-words.txt', function(err) {
-        if (err)
-            return res.status(500).send(err);
-
-        res.send('File uploaded!');
-    });
 });
 /**
  * *****************************End Admin Routes
