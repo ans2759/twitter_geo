@@ -1,23 +1,27 @@
 <div class="row">
-    <div class="col-6">
+    <div class="col mx-auto">
         <h4>Bounding Box Coordinates: </h4>
     </div>
 </div>
 <form>
-    <div class="row loader" data-ng-if="ctrl.showBoundingInfoLoader"></div>
+    <div class="row" data-ng-if="ctrl.showBoundingInfoLoader">
+        <div class="col mx-auto">
+            <div class="loader"></div>
+        </div>
+    </div>
     <div data-ng-if="!ctrl.showBoundingInfoLoader">
         <div class="form-group row">
 
-            <div class="col-2">
+            <div class="col-2 mx-auto">
                 <h5>Lower Left Corner:</h5>
             </div>
             <label for="lowerLeftLat" class="col-1 col-form-label">Latitude:</label>
-            <div class="col-1">
+            <div class="col-2 mx-auto">
                 <input type="text" class="form-control" id="lowerLeftLat" data-ng-model="ctrl.boundingInfo.lowerLeft.lat">
             </div>
 
             <label for="lowerLeftLng" class="col-1 col-form-label">Longitude:</label>
-            <div class="col-1">
+            <div class="col-2 mx-auto">
                 <input type="text" class="form-control" id="lowerLeftLng" data-ng-model="ctrl.boundingInfo.lowerLeft.lng">
             </div>
 
@@ -25,23 +29,23 @@
 
         <div class="form-group row">
 
-            <div class="col-2">
+            <div class="col-2 mx-auto">
                 <h5>Upper Right Corner:</h5>
             </div>
             <label for="lowerLeftLat" class="col-1 col-form-label">Latitude:</label>
-            <div class="col-1">
+            <div class="col-2 mx-auto">
                 <input type="text" class="form-control" id="upperRightLat" data-ng-model="ctrl.boundingInfo.upperRight.lat">
             </div>
 
             <label for="lowerLeftLng" class="col-1 col-form-label">Longitude:</label>
-            <div class="col-1">
+            <div class="col-2 mx-auto">
                 <input type="text" class="form-control" id="upperRightLng" data-ng-model="ctrl.boundingInfo.upperRight.lng">
             </div>
 
         </div>
 
         <div class="form-group row">
-            <div class="col">
+            <div class="col mx-auto">
                 <button type="submit"
                         class="btn btn-primary"
                         data-toggle="modal"
@@ -61,14 +65,16 @@
     </div>
 </form>
 
+<hr>
+
 <div class="row">
-    <div class="col-6">
+    <div class="col mx-auto">
         <h4>Users: </h4>
         <div class="form-group">
             <label for="userSearch">Search users</label>
             <input id="userSearch" type="text" data-ng-model="ctrl.userSearch">
         </div>
-        <div>
+        <div class="users-table">
             <div class="loader" data-ng-if="ctrl.showUsersLoader === true"></div>
             <table class="table table-striped" data-ng-if="ctrl.showUsersLoader === false">
                 <thead>
@@ -116,42 +122,46 @@
     </div>
 </div>
 
+<hr>
+
 <div class="row">
-    <div class="col">
+    <div class="col mx-auto">
         <h5 class="d-inline-block">Stream:</h5>
         <span data-ng-if="ctrl.streamConnected">Connected</span>
         <span data-ng-if="!ctrl.streamConnected">Disconnected</span>
     </div>
-    <div class="col">
+    <div class="col mx-auto">
+        <span>Tweets collected: {{ctrl.tweetsCollected}}</span>
+    </div>
+    <div class="col mx-auto">
         <button type="button" class="btn btn-success" data-ng-if="!ctrl.streamConnected" data-ng-click="ctrl.connectStream()">Connect Stream</button>
         <button type="button" class="btn btn-success" data-ng-if="ctrl.streamConnected" data-ng-click="ctrl.closeStream()">Disconnect Stream</button>
     </div>
 </div>
 
+<hr>
+
 <div class="row">
-    <div class="col">
+    <div class="col mx-auto">
         <div nv-file-drop="" uploader="ctrl.uploader">
             <div class="well my-drop-zone" nv-file-over data-uploader="ctrl.uploader">
-                Drop File here
+                Drop .txt File here
             </div>
         </div>
     </div>
-    <div class="col">
+    <div class="col mx-auto">
         <form>
-            <input type="file" accept=".txt" nv-file-select uploader="ctrl.uploader"/><br/>
-            <ul>
-                <li ng-repeat="item in ctrl.uploader.queue">
-                    Name: <span ng-bind="item.file.name"></span><br/>
-                    <button ng-click="item.upload()">upload</button>
+            <input type="file" accept=".txt" nv-file-select uploader="ctrl.uploader"/>
+            <ul class="list-group stop-word-upload">
+                <li class="list-group-item" ng-repeat="item in ctrl.uploader.queue">
+                    <button class="btn btn-success" ng-click="item.upload()">upload</button>
                 </li>
             </ul>
-            <!--<div class="custom-file">
-                <input type="file" class="custom-file-input" id="stopWordsFile" data-ng-model="ctrl.stopWordsList">
-                <label class="custom-file-label" for="stopWordsFile">Choose file</label>
-            </div>-->
         </form>
     </div>
 </div>
+
+<hr>
 
 <toast></toast>
 

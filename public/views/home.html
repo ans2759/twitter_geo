@@ -1,10 +1,27 @@
 <div>
     <toast></toast>
-    <h1>Twitter Geo</h1>
-    <label for="wordSearch">Filter: </label>
-    <input type="text" id="wordSearch" data-ng-model="ctrl.wordSearch"/>
-    <div data-ng-repeat="word in ctrl.words | orderBy : '-count' | filter: ctrl.wordSearch">
-        <a ui-sref="word({word: word.word})">{{word.word}}</a>
-        <p class="d-inline">({{word.count}})</p>
+    <div class="row">
+        <div class="col">
+            <h1>Twitter Geo</h1>
+            <label for="wordSearch">Filter: </label>
+            <input type="text" id="wordSearch" data-ng-model="ctrl.wordSearch"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4">
+            <div class="list-group-flush" data-ng-repeat="word in ctrl.words | orderBy : '-count' | filter: ctrl.wordSearch">
+                <div class="list-group-item list-group-item-action" ui-sref="word({word: word.word})">
+                    <div class="row>">
+                        <div class="col-6">
+                            <h5 class="d-inline-block">{{word.word}}</h5>
+                        </div>
+                        <div class="col-6">
+                            <p class="d-inline">Count: {{word.count}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

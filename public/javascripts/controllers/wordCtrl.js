@@ -27,7 +27,7 @@
 
         _this.showAllTweets = function() {
             map.deleteMarkers();
-            map.addTweets(_this.tweets);
+            map.addTweets(_this.tweets.filter(tweet => tweet.geo));
         };
 
     };

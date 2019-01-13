@@ -4,7 +4,8 @@
     const MessageBus = function ($rootScope) {
 
         const events = {
-            CONNECTION_UPDATE: 'CONNECTION_UPDATE'
+            CONNECTION_UPDATE: 'CONNECTION_UPDATE',
+            TWEETS_COLLECTED: 'TWEETS_COLLECTED'
         };
 
         const subscribe = (event, callback) => {

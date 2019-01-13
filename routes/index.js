@@ -175,7 +175,11 @@ router.put('/updateCorners', cel.ensureLoggedIn(), isAdmin(), function(req, res,
 
 router.get('/streamConnected', cel.ensureLoggedIn(), isAdmin(), function(req, res, next) {
     console.log('Is Stream connected?');
-    res.json({connected: tweetCatcher.TweetCatcher.getInstance().isConnected()})
+    const TweetCatcher = tweetCatcher.TweetCatcher.getInstance();
+    res.json({
+        connected: TweetCatcher.isConnected(),
+        count: TweetCatcher.getCount()
+    })
 });
 
 router.put('/connectStream', cel.ensureLoggedIn(), isAdmin(), function(req, res, next) {

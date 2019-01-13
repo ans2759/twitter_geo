@@ -94,7 +94,7 @@ const getTweets = function (db, stopWordsList) {
         const testtweets = db.collection('testtweets');
         let foundWords = {};
         let date = new Date();
-        date.setDate(date.getDate() - 7);
+        date.setDate(date.getHours() - 1);
         testtweets.find({timestamp_ms: {$gt: date.getTime()}}).each(function (err, tweet) {
             if (err !== null) {
                 reject(err);
@@ -137,7 +137,7 @@ const buildStopWordList = function (db) {
                 reject(err);
             } else {
                 process.send("Built Stop-words list with length: " + words.length);
-                resolve(words);
+                resolve(words.map(word => word.word));
             }
         });
     })

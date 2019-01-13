@@ -19,6 +19,7 @@
         _this.changeAdminAction = 'UPDATE_ADMIN';
         _this.deleteUserAction = 'DELETE_USER';
         _this.updateCornersAction = 'UPDATE_CORNERS';
+        _this.tweetsCollected = 0;
         _this.uploader = new FileUploader({
             url: '/uploadStopWords',
             removeAfterUpload: true
@@ -39,6 +40,10 @@
         function initPage() {
             MessageBus.subscribe(MessageBus.events.CONNECTION_UPDATE, (event, data) => {
                 _this.streamConnected = data.connected;
+            });
+
+            MessageBus.subscribe(MessageBus.events.TWEETS_COLLECTED, (event, data) => {
+                _this.tweetsCollected = data.tweets;
             });
             StreamConnected.startPolling();
             _this.getBoundingInfo();
@@ -67,7 +72,7 @@
                 console.error("Error uploading stop-words", response);
                 ngToast.danger("Error uploading stop-words file: " + response.data);
             };
-        }
+        };
 
         _this.getBoundingInfo = function() {
             ResourceFactory.getBoundingInfo({}, function(response) {

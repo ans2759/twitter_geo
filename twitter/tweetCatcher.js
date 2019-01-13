@@ -42,14 +42,11 @@ const TweetCatcher = (function() {
                             streamReference = stream;
 
                             stream.on('data', function (tweet) {
-                                if (tweet.geo !== null) {
-                                    console.log('tweet received');
-                                    tweet.timestamp_ms = parseInt(tweet.timestamp_ms);
-                                    collection.insertOne(tweet, function (err, r) {
-                                        assert.equal(null, err);
-                                        console.log('tweet stored: ' + ++counter);
-                                    });
-                                }
+                                tweet.timestamp_ms = parseInt(tweet.timestamp_ms);
+                                collection.insertOne(tweet, function (err, r) {
+                                    assert.equal(null, err);
+                                    counter++;
+                                });
                             });
 
                             stream.on('error', function (err) {
