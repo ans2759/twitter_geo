@@ -36,8 +36,9 @@ const app = angular.module("app", ['ui.router', 'ngResource', 'ngCookies', 'ngTo
             controller: 'AdminCtrl',
             controllerAs: 'ctrl',
             templateUrl: 'views/admin.html',
-            onExit: function(StreamConnected) {
+            onExit: function(StreamConnected, TweetCount) {
                 StreamConnected.cancel();
+                TweetCount.cancel();
             }
         });
 

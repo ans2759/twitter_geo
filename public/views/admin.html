@@ -137,13 +137,16 @@
         <button type="button" class="btn btn-success" data-ng-if="!ctrl.streamConnected" data-ng-click="ctrl.connectStream()">Connect Stream</button>
         <button type="button" class="btn btn-success" data-ng-if="ctrl.streamConnected" data-ng-click="ctrl.closeStream()">Disconnect Stream</button>
     </div>
+    <div class="col mx-auto">
+        <span>Total Tweets: {{ctrl.totalTweets}}</span>
+    </div>
 </div>
 
 <hr>
 
 <div class="row">
     <div class="col mx-auto">
-        <div nv-file-drop="" uploader="ctrl.uploader">
+        <div nv-file-drop="" data-uploader="ctrl.uploader">
             <div class="well my-drop-zone" nv-file-over data-uploader="ctrl.uploader">
                 Drop .txt File here
             </div>
@@ -151,7 +154,7 @@
     </div>
     <div class="col mx-auto">
         <form>
-            <input type="file" accept=".txt" nv-file-select uploader="ctrl.uploader"/>
+            <input type="file" accept=".txt" nv-file-select data-uploader="ctrl.uploader"/>
             <ul class="list-group stop-word-upload">
                 <li class="list-group-item" ng-repeat="item in ctrl.uploader.queue">
                     <button class="btn btn-success" ng-click="item.upload()">upload</button>
@@ -163,7 +166,18 @@
 
 <hr>
 
-<toast></toast>
+<div class="row">
+    <div class="col mx-auto">
+        <button class="btn btn-dark"
+                data-toggle="modal"
+                data-target="#confirmModal"
+                data-ng-click="ctrl.showConfirmModal(ctrl.archiveDataAction)">
+            Archive Tweets
+        </button>
+    </div>
+</div>
+
+<hr>
 
 <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm" role="document">

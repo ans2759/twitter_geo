@@ -2,6 +2,7 @@ const MongoDb = require('mongodb');
 const MongoClient = MongoDb.MongoClient;
 const assert = require('assert');
 const DB = require('./db');
+const DateTime = require('date-and-time');
 
 const url = DB.url;
 const DB_NAME = DB.dbName;
@@ -93,9 +94,8 @@ const getTweets = function (db, stopWordsList) {
     return new Promise(function(resolve, reject) {
         const testtweets = db.collection('testtweets');
         let foundWords = {};
-        let date = new Date();
-        date.setDate(date.getHours() - 1);
-        testtweets.find({timestamp_ms: {$gt: date.getTime()}}).each(function (err, tweet) {
+
+        testtweets.find({timestamp_ms: {$gt: DateTime.addHours(new Date(), -1).getTime()}}).each(function (err, tweet) {
             if (err !== null) {
                 reject(err);
             } else {

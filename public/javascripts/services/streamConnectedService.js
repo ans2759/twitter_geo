@@ -14,7 +14,9 @@
                     MessageBus.publish(MessageBus.events.CONNECTION_UPDATE, {connected: streamConnected});
                 }
                 count = response.count;
-                MessageBus.publish(MessageBus.events.TWEETS_COLLECTED, {tweets: count});
+                if (count > 0) {
+                    MessageBus.publish(MessageBus.events.TWEETS_COLLECTED, {tweets: count});
+                }
                 timer = $timeout(startPolling, 10000);
             });
         };

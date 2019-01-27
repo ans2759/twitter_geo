@@ -233,6 +233,23 @@ router.post('/uploadStopWords', cel.ensureLoggedIn(), isAdmin(), (req, res, next
         });
     }
 });
+
+router.post('/archiveTweets', cel.ensureLoggedIn(), isAdmin(), (req, res, next) => {
+    db.archiveData().then(() => {
+        res.status(200).send("Tweets Archived!");
+    }, (err) => {
+        console.error(err);
+        res.status(500).send({data:err})
+    });
+});
+
+router.get('/getTweetCount', cel.ensureLoggedIn(), isAdmin(), (req, res, next) => {
+    db.getTweetCount().then((count) => {
+        res.status(200).send({count: count});
+    }, (error) => {
+        res.status(500).send({data: error});
+    })
+});
 /**
  * *****************************End Admin Routes
  */

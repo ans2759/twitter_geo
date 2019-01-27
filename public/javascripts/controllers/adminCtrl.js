@@ -4,7 +4,7 @@
 (function () {
     'use strict';
     const app = angular.module('app');
-    const AdminCtrl = function (ResourceFactory, $state, map, ngToast, StreamConnected, MessageBus, FileUploader) {
+    const AdminCtrl = function (ResourceFactory, $state, map, ngToast, StreamConnected, MessageBus, FileUploader, TweetCount) {
         console.log("AdminCtrl init");
 
         const _this = this;
@@ -19,7 +19,9 @@
         _this.changeAdminAction = 'UPDATE_ADMIN';
         _this.deleteUserAction = 'DELETE_USER';
         _this.updateCornersAction = 'UPDATE_CORNERS';
+        _this.archiveDataAction = 'ARCHIVE_DATA';
         _this.tweetsCollected = 0;
+        _this.totalTweets = 0;
         _this.uploader = new FileUploader({
             url: '/uploadStopWords',
             removeAfterUpload: true
@@ -45,6 +47,11 @@
             MessageBus.subscribe(MessageBus.events.TWEETS_COLLECTED, (event, data) => {
                 _this.tweetsCollected = data.tweets;
             });
+
+            MessageBus.subscribe(MessageBus.events.TOTAL_TWEETS, (event, data) => {
+               _this.totalTweets = data.count;
+            });
+            TweetCount.startPolling();
             StreamConnected.startPolling();
             _this.getBoundingInfo();
             _this.getUsers();
@@ -162,6 +169,10 @@
                     _this.confirmMessage = 'Set coordinates?';
                     action = proposedAction;
                     break;
+                case _this.archiveDataAction:
+                    _this.confirmMessage = 'Archive Tweets?';
+                    action = proposedAction;
+                    break;
                 default:
                     console.error("invalid action");
             }
@@ -177,6 +188,9 @@
                     break;
                 case _this.updateCornersAction:
                     _this.updateCorners();
+                    break;
+                case _this.archiveDataAction:
+                    _this.archiveTweets();
                     break;
                 default:
                     console.error("invalid action");
@@ -209,7 +223,15 @@
                 ngToast.danger(error.data);
             });
         };
+
+        _this.archiveTweets = function() {
+            ResourceFactory.archiveTweets({}, function() {
+                ngToast.success("Data successfully archived");
+            }, function(error) {
+                ngToast.danger(error.data.data);
+            });
+        }
     };
-    AdminCtrl.$inject = ['ResourceFactory', '$state', 'map', 'ngToast', 'StreamConnected', 'MessageBus', 'FileUploader'];
+    AdminCtrl.$inject = ['ResourceFactory', '$state', 'map', 'ngToast', 'StreamConnected', 'MessageBus', 'FileUploader', 'TweetCount'];
     app.controller('AdminCtrl', AdminCtrl);
 }());

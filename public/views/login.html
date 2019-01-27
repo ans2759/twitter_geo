@@ -3,10 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+
+    <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
 </head>
 <body>
-    <div>
-        <a href="/login/twitter">Login with Twitter</a>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" data-ui-sref="home">TrendSpottr</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="jumbotron bg-light">
+            <h1 class="display-4">TrendSpottr</h1>
+            <a class="btn btn-primary btn-lg" href="/login/twitter">Login with Twitter</a>
+        </div>
     </div>
 </body>
 </html>

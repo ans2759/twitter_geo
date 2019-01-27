@@ -1,24 +1,33 @@
 <div class="row">
     <div class="col mx-auto">
+
         <h1> Word: {{ctrl.word}}</h1>
 
         <button data-ng-disabled="ctrl.tweets.length < 1" data-ng-click="ctrl.showAllTweets()" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
             Show Map
         </button>
 
-        <div data-ng-if="ctrl.tweets.length > 0" data-ng-repeat="tweet in ctrl.tweets">
-            <p class="d-inline-block">
-                {{tweet.text}}
-            </p>
-            <button data-ng-click="ctrl.showTweet(tweet)"
-                    type="button"
-                    class="btn btn-primary btn-sm"
-                    data-toggle="modal"
-                    data-target="#exampleModal"
-                    data-ng-if="tweet.geo">
-                Show on map
-            </button>
+        <div data-ng-if="ctrl.tweets.length > 0" class="list-group">
+            <div data-ng-repeat="tweet in ctrl.tweets" class="list-group-item">
+                <div class="d-flex">
+                    <div class="p-2">
+                        <span>{{tweet.timestamp_ms | date: 'shortTime'}}</span>
+                        <p>{{tweet.text}}</p>
+                    </div>
+                    <div class="ml-auto p-2">
+                        <button data-ng-click="ctrl.showTweet(tweet)"
+                                type="button"
+                                class="btn btn-primary btn-sm"
+                                data-toggle="modal"
+                                data-target="#exampleModal"
+                                data-ng-if="tweet.geo">
+                            Show on map
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <p data-ng-if="ctrl.tweets.length < 1">Waiting</p>
     </div>
 </div>

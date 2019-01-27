@@ -5,17 +5,28 @@
 
         const events = {
             CONNECTION_UPDATE: 'CONNECTION_UPDATE',
-            TWEETS_COLLECTED: 'TWEETS_COLLECTED'
+            TWEETS_COLLECTED: 'TWEETS_COLLECTED',
+            TOTAL_TWEETS: 'TOTAL_TWEETS'
         };
 
         const subscribe = (event, callback) => {
-            console.log("Subscribing to event: " + event);
-            $rootScope.$on(event, callback);
+            const msgBusEvent = events[event];
+            if (!msgBusEvent) {
+                log.error("No such event: " + event);
+            } else {
+                console.log("Subscribing to event: " + event);
+                $rootScope.$on(msgBusEvent, callback);
+            }
         };
 
         const publish = (event, data) => {
-            console.log("Publishing event: " + event);
-            $rootScope.$emit(event, data);
+            const msgBusEvent = events[event];
+            if (!msgBusEvent) {
+                log.error("No such event: " + event);
+            } else {
+                console.log("Publishing event: " + event);
+                $rootScope.$emit(msgBusEvent, data);
+            }
         };
 
         return {

@@ -86,6 +86,16 @@
                     method: 'POST',
                     isArray: false,
                     url: '/uploadStopWords'
+                },
+                archiveTweets: {
+                    method: 'POST',
+                    isArray: false,
+                    url: '/archiveTweets'
+                },
+                getTweetCount: {
+                    method: 'GET',
+                    isArray: false,
+                    url: '/getTweetCount'
                 }
             }
         );
