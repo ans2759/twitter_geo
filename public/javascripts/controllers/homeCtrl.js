@@ -9,6 +9,7 @@
 
         const _this = this;
         _this.words = [];
+        _this.showLoader = true;
 
         if ($stateParams.accountCreated) {
             $location.url('home');
@@ -28,6 +29,7 @@
         function getCommonWords() {
             ResourceFactory.getCommonWords({}, function(response){
                 _this.words = response;
+                _this.showLoader = false;
                 console.log('Common words retrieved');
             }, function (err) {
                 console.error("Error retrieving common words")

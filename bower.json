@@ -5,7 +5,8 @@
     "bootstrap": "latest",
     "angular": "latest",
     "angular-route": "latest",
-    "angular-upload": "^1.0.12"
+    "angular-upload": "^1.0.12",
+    "ngtweet": "^1.0.0"
   },
   "resolutions": {
     "angular": "1.7.3",

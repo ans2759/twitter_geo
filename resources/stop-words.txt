@@ -53,6 +53,7 @@ among
 amongst
 amoungst
 amount
+amp
 an
 and
 another
@@ -115,6 +116,7 @@ day
 de
 describe
 detail
+did
 do
 done
 dont
@@ -162,6 +164,7 @@ get
 give
 go
 going
+gonna
 good
 got
 great
@@ -178,9 +181,12 @@ hereby
 herein
 hereupon
 hers
-herse"
+herse
+hes
+hey
+hi
 him
-himse"
+himse
 hire
 hiring
 his
@@ -200,7 +206,8 @@ into
 is
 it
 its
-itse"
+itse
+ive
 job
 jobs
 join
@@ -214,7 +221,13 @@ latter
 latterly
 least
 less
+let
+lets
 like
+lmao
+look
+lol
+los
 ltd
 made
 make
@@ -225,6 +238,7 @@ meanwhile
 might
 mill
 mine
+miss
 more
 moreover
 most
@@ -253,9 +267,11 @@ nothing
 now
 nowhere
 nursing
+oh
 of
 off
 often
+ok
 on
 once
 one
@@ -285,6 +301,7 @@ rd
 re
 retail
 right
+said
 sales
 same
 see
@@ -368,8 +385,10 @@ until
 up
 upon
 us
+use
 very
 via
+wanna
 want
 was
 way
@@ -377,6 +396,7 @@ we
 well
 were
 what
+whats
 whatever
 when
 whence
@@ -403,6 +423,11 @@ with
 within
 without
 would
+ya
+yah
+yea
+yeah
+yes
 yet
 you
 your

@@ -20,6 +20,9 @@
     <script src="libs/angular-file-upload/dist/angular-file-upload.min.js"></script>
     <script src="libs/ngToast/dist/ngToast.min.js"></script>
     <script src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="libs/ngtweet/dist/ngtweet.min.js"></script>
+
+    <!--Angular app-->
     <script src="javascripts/app.js"></script>
     <script src="javascripts/factories/ResourceFactory.js"></script>
     <script src="javascripts/controllers/homeCtrl.js"></script>
@@ -55,7 +58,7 @@
 
         <br>
 
-        <div class="container" ui-view></div>
+        <div class="container" twitter-widget-initialize ui-view></div>
         <toast></toast>
     </div>
 

@@ -96,6 +96,11 @@
                     method: 'GET',
                     isArray: false,
                     url: '/getTweetCount'
+                },
+                yelpSearch: {
+                    method: 'GET',
+                    isArray: false,
+                    url: '/yelp-search'
                 }
             }
         );

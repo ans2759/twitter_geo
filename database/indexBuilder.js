@@ -26,9 +26,6 @@ const buildIndex = function () {
                         insertWords(db.collection('indexedwords'), foundWords).then(function() {
                             client.close();
                             process.send("Completed Index Building");
-                            setTimeout(() => {
-                                buildIndex();
-                            }, 60000);
                             resolve();
                         });
                     })
@@ -69,6 +66,8 @@ const dropIndex = function(db) {
                         resolve();
                     }
                 });
+            } else {
+                resolve();
             }
         });
     })
@@ -95,7 +94,7 @@ const getTweets = function (db, stopWordsList) {
         const testtweets = db.collection('testtweets');
         let foundWords = {};
 
-        testtweets.find({timestamp_ms: {$gt: DateTime.addHours(new Date(), -1).getTime()}}).each(function (err, tweet) {
+        testtweets.find({timestamp_ms: {$gt: DateTime.addHours(new Date(), -4).getTime()}}).each(function (err, tweet) {
             if (err !== null) {
                 reject(err);
             } else {
@@ -145,7 +144,9 @@ const buildStopWordList = function (db) {
 
 process.on('message', (msg) => {
     process.send("Buidling Index");
-    buildIndex();
+    buildIndex().then(() => {
+        process.disconnect();
+    });
 });
 
 process.stdout.on('error', function( err ) {

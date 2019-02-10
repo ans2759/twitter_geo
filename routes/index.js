@@ -6,7 +6,7 @@ const passport = require('passport');
 const cel = require('connect-ensure-login');
 const latLngRegex = new RegExp("^-?[0-9]{1,3}\\.[0-9]{1,3}$");
 const stopWords = require('../twitter/stopWords');
-
+const yelp = require('../yelp/yelpClient');
 
 /**
  * *****************************Home Routes
@@ -107,6 +107,22 @@ router.get('/common-words', cel.ensureLoggedIn(), function (req, res, next) {
     db.getIndex().then(function (words) {
         res.json(words);
     })
+});
+
+router.get('/yelp-search', cel.ensureLoggedIn(), function(req, res, next) {
+    const word = req.query.word;
+    console.log('Querying yelp for word: ' + word);
+    if (word != null && word !== '') {
+        const loc = tweetCatcher.getCenter();
+        yelp.search(word, loc.lat, loc.lng).then((result) => {
+            res.status(200).send(result);
+        }, (error) => {
+            res.status(500).send({data: error});
+        });
+    } else {
+        console.error('No word provided');
+        res.status(400).send({data: 'No word included in request'})
+    }
 });
 /**
  * *****************************End Word Routes

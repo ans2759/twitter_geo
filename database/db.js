@@ -41,7 +41,7 @@ exports.getIndex = function() {
 };
 
 function getTweetsFromDb(word, reject, resolve) {
-    MongoClient.connect(URL).then(function (client) {
+    MongoClient.connect(URL, { useNewUrlParser: true }).then(function (client) {
         const db = client.db(DB_NAME);
         db.collection('indexedwords').findOne({word: word}, function (err, tweetIds) {
             if (err !== null || tweetIds === null) {

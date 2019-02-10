@@ -1,7 +1,7 @@
 /**
  * Created by alexs on 8/13/2018.
  */
-const app = angular.module("app", ['ui.router', 'ngResource', 'ngCookies', 'ngToast', 'angularFileUpload'])
+const app = angular.module("app", ['ui.router', 'ngResource', 'ngCookies', 'ngToast', 'angularFileUpload', 'ngtweet'])
 
     .config(function($stateProvider, $urlRouterProvider) {
 
