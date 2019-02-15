@@ -2,14 +2,20 @@
   "name": "twitter-geo",
   "version": "1.0.0",
   "dependencies": {
-    "bootstrap": "latest",
-    "angular": "latest",
-    "angular-route": "latest",
-    "angular-upload": "^1.0.12",
-    "ngtweet": "^1.0.0"
+    "bootstrap": "4.3.1",
+    "angular": "1.7.3",
+    "ngtweet": "latest",
+    "angular-sanitize": "1.2.32",
+    "angular-animate": "1.7.3",
+    "angular-cookies": "1.7.3",
+    "angular-file-upload": "2.5.0",
+    "angular-resource": "1.7.7",
+    "angular-ui-event": "1.0.0",
+    "angular-ui-router": "1.0.20",
+    "jQuery": "3.3.1",
+    "ngToast": "2.0.0"
   },
   "resolutions": {
-    "angular": "1.7.3",
-    "angular-cookies": "1.7.3"
+    "angular": "1.7.3"
   }
 }
