@@ -1,6 +1,13 @@
 ---cache DB index
 reset zoom on map
-login screen layout
+----login screen layout
 ---error when making call to connect stream
 error handling
 favicon
+db deletion
+----index all tweets
+stream disconnect handling
+stream connect/disconnect UI messaging
+secure db
+----filter only by tweets with geo
+hide show map if no geo tweets
