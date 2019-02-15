@@ -33,6 +33,8 @@
             <button data-ng-click="ctrl.searchYelp()"
                     data-ng-if="ctrl.word"
                     type="button"
+                    data-toggle="modal"
+                    data-target="#businessModal"
                     class="btn btn-dark">
                 Search Yelp Business
             </button>
@@ -53,5 +55,40 @@
         </div>
 
         <div class="loader" data-ng-if="ctrl.showLoader"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="businessModal" tabindex="-1" role="dialog" aria-labelledby="businessModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="businessModalLabel">Confirm Action</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div data-ng-if="ctrl.businesses.length > 0" class="modal-body">
+                <div data-ng-repeat="business in ctrl.businesses" class="d-flex align-items-stretch">
+                    <div class="p-2" style="max-height: 150px">
+                        <img class="mr-3 img-thumbnail" style="max-height: 100%" src="{{business.image_url}}" alt="Business Image">
+                    </div>
+                    <div class="p-2">
+                        <h5 class="mt-0 mb-1">{{business.name}}</h5>
+                        <span class="d-block">{{business.location.display_address[0]}}</span>
+                        <span class="d-block">{{business.location.display_address[1]}}</span>
+                        <img class="d-inline-block" src="{{ctrl.getStarImageUrl(business.rating)}}" alt="Business rating is {{business.rating}}stars">
+                        <div>
+                            <a href="{{business.url}}" target="_blank">
+                                <img src="images/yelp/Yelp_trademark_RGB.png" alt="Yelp logo">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-ng-click="ctrl.closeConfirmModal()">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" data-ng-click="ctrl.performAction()">Make changes</button>
+            </div>
+        </div>
     </div>
 </div>

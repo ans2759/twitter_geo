@@ -99,7 +99,7 @@
                 },
                 yelpSearch: {
                     method: 'GET',
-                    isArray: false,
+                    isArray: true,
                     url: '/yelp-search'
                 }
             }

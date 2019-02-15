@@ -11,7 +11,7 @@ exports.search = (term, latitude, longitude) => {
         }).then(response => {
             console.log('Received response from yelp');
             if (response.statusCode === 200) {
-                resolve(response.jsonBody);
+                resolve(response.jsonBody.businesses);
             } else {
                 console.log("Response status code " + response.statusCode + " returned from yelp");
                 reject("Error searching yelp");
