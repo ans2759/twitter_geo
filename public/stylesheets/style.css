@@ -56,3 +56,13 @@ nav .container {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.yelp-business-logo {
+  max-width: 200px;
+  height: auto;
+}
+
+.yelp-logo {
+  max-width: 100px;
+  height: auto;
+}

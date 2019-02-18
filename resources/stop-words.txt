@@ -40,6 +40,7 @@ after
 afterwards
 again
 against
+aint
 all
 almost
 alone
@@ -91,6 +92,7 @@ best
 between
 beyond
 bill
+blvd
 both
 bottom
 building
@@ -117,6 +119,7 @@ de
 describe
 detail
 did
+didnt
 do
 done
 dont
@@ -167,6 +170,7 @@ going
 gonna
 good
 got
+gotta
 great
 had
 has
@@ -228,6 +232,7 @@ lmao
 look
 lol
 los
+lot
 ltd
 made
 make
@@ -332,6 +337,7 @@ stop
 street
 still
 such
+sure
 supervisor
 system
 take
@@ -359,6 +365,7 @@ these
 they
 thick
 thin
+thing
 third
 this
 those
@@ -429,6 +436,7 @@ yea
 yeah
 yes
 yet
+yo
 you
 your
 youre
