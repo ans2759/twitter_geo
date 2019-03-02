@@ -54,6 +54,12 @@
             }
         };
 
+        _this.searchYelpGeo = function(tweet) {
+            ResourceFactory.yelpSearchGeo({lat: tweet.geo.coordinates[0], lng: tweet.geo.coordinates[1]}, (response) => {
+                _this.businesses = response;
+            });
+        };
+
         _this.getStarImageUrl = function(rating) {
             let url = YELP_IMAGES_PATH;
             switch (rating) {

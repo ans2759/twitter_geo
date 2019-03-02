@@ -10,7 +10,6 @@ const APIKeys = require('./secure/twitterAccess');
 const processRunner = require('./utils/processRunner');
 
 const index = require('./routes/index');
-const users = require('./routes/users');
 
 const db = require('./database/db');
 const tweetCacther = require('./twitter/tweetCatcher');
@@ -80,12 +79,13 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development
+    console.error("error", err);
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 
     // render the error page
     res.status(err.status || 500);
-    res.json({data: 'error'});
+    res.json({data: err.message});
 });
 
 db.createIndexes();

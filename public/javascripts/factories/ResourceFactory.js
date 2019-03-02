@@ -101,6 +101,11 @@
                     method: 'GET',
                     isArray: true,
                     url: '/yelp-search'
+                },
+                yelpSearchGeo: {
+                    method: 'GET',
+                    isArray: true,
+                    url: '/yelp-search-geo'
                 }
             }
         );

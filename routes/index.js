@@ -124,6 +124,22 @@ router.get('/yelp-search', cel.ensureLoggedIn(), function(req, res, next) {
         res.status(400).send({data: 'No word included in request'})
     }
 });
+
+router.get('/yelp-search-geo', cel.ensureLoggedIn(), function(req, res, next) {
+    const lat = req.query.lat;
+    const lng = req.query.lng;
+    console.log('Querying yelp for lat: ' + lat + "and lng: " + lng);
+    if (lat != null && lat !== '' && lng != null && lng !== '') {
+        yelp.search(null, lat, lng).then((result) => {
+            res.status(200).send(result);
+        }, (error) => {
+            res.status(500).send({data: error});
+        });
+    } else {
+        console.error('No coordinates provided');
+        res.status(400).send({data: 'No coordinates included in request'})
+    }
+});
 /**
  * *****************************End Word Routes
  */

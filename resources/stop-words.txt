@@ -41,6 +41,7 @@ afterwards
 again
 against
 aint
+al
 all
 almost
 alone
@@ -121,6 +122,7 @@ detail
 did
 didnt
 do
+does
 done
 dont
 down
@@ -145,6 +147,7 @@ everyone
 everything
 everywhere
 except
+feel
 few
 fifteen
 fify
@@ -176,6 +179,7 @@ had
 has
 hasnt
 have
+having
 he
 hence
 her
@@ -208,6 +212,7 @@ indeed
 interest
 into
 is
+isnt
 it
 its
 itse
@@ -230,6 +235,7 @@ lets
 like
 lmao
 look
+looking
 lol
 los
 lot
@@ -238,8 +244,10 @@ made
 make
 many
 may
+maybe
 me
 meanwhile
+mi
 might
 mill
 mine
@@ -301,6 +309,7 @@ please
 posted
 posting
 put
+que
 rather
 rd
 re
@@ -309,12 +318,16 @@ right
 said
 sales
 same
+say
+se
 see
 seem
 seemed
 seeming
 seems
+seen
 serious
+set
 several
 she
 should
@@ -341,6 +354,7 @@ sure
 supervisor
 system
 take
+tell
 ten
 technician
 than
@@ -365,11 +379,14 @@ these
 they
 thick
 thin
+think
 thing
+things
 third
 this
 those
 though
+thought
 three
 through
 throughout
@@ -400,6 +417,7 @@ want
 was
 way
 we
+went
 well
 were
 what
@@ -431,6 +449,7 @@ within
 without
 would
 ya
+yall
 yah
 yea
 yeah

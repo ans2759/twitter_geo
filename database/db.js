@@ -21,7 +21,7 @@ exports.dbName = DB_NAME;
 function getIndexFromDb(resolve, reject) {
     MongoClient.connect(URL).then(function (client) {
         const db = client.db(DB_NAME);
-        db.collection('indexedwords').find({count: {$gt: 9}}).toArray(function (err, words) {
+        db.collection('indexedwords').find({count: {$gt: 19}}).toArray(function (err, words) {
             myCache.set(INDEXED_WORDS, words);
             closeAndResolve(resolve, reject, client, err, words);
         });
@@ -52,7 +52,7 @@ function getTweetsFromDb(word, reject, resolve) {
                     _id: {
                         $in: tweetIds.tweets
                     }
-                }).toArray(function (err, data) {
+                }).limit(200).toArray(function (err, data) {
                     myCache.set(TWEET_CACHE_PREFIX + word, data);
                     closeAndResolve(resolve, reject, client, err, data);
                 })

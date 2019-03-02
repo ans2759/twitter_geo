@@ -9,22 +9,24 @@
         const mapDiv = angular.element(document.getElementById('map'));
         let lat;
         let lng;
+        let mapModalFooter;
 
         _this.initMap = function() {
-                ResourceFactory.getCoordinates({}, function (res) {
-                    if (!map) {
-                        lat = res.lat;
-                        lng = res.lng;
-                        map = new google.maps.Map(document.getElementById('map'), {
-                            center: {lat: res.lat, lng: res.lng},
-                            zoom: 11
-                        });
-                    } else {
-                        map.setCenter({lat: res.lat, lng: res.lng});
-                    }
-                }, function (err) {
-                    console.error("Error retrieving coordinates", err)
-                });
+            mapModalFooter = $('#mapModalFooter');
+            ResourceFactory.getCoordinates({}, function (res) {
+                if (!map) {
+                    lat = res.lat;
+                    lng = res.lng;
+                    map = new google.maps.Map(document.getElementById('map'), {
+                        center: {lat: res.lat, lng: res.lng},
+                        zoom: 11
+                    });
+                } else {
+                    map.setCenter({lat: res.lat, lng: res.lng});
+                }
+            }, function (err) {
+                console.error("Error retrieving coordinates", err)
+            });
         };
 
         _this.addTweets = function(tweets) {
@@ -71,7 +73,7 @@
             markers.push(marker);
 
             google.maps.event.addListener(marker, 'click', function() {
-                $('#mapModalFooter').html('<div class="p-2">' +
+                mapModalFooter.html('<div class="p-2">' +
                     '<blockquote class="twitter-tweet" lang="en">' +
                     '<p>' + tweet.text + ' </p>&mdash; ' + tweet.user.name + '@' + tweet.user.screen_name +
                     '<a href="' + url + '">' + tweet.created_at + '</a>' +
@@ -99,6 +101,7 @@
         // Deletes all markers in the array by removing references to them.
         _this.deleteMarkers = function() {
             clearMarkers();
+            mapModalFooter.html('<div class="p-2"></div>');
             markers = [];
         };
 
