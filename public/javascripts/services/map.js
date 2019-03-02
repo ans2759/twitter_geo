@@ -64,27 +64,20 @@
                 title: tweet.user.name
             });
 
-            const infoWindow = new google.maps.InfoWindow({
-                content: '<div id="content">'+
-                '<div id="siteNotice">'+
-                '</div>'+
-                '<h1 id="firstHeading" class="firstHeading">' + tweet.user.name + '</h1>'+
-                '<div id="bodyContent">'+
-                '<p>' + tweet.text + '</p>'+
-                '</div>'+
-                '</div>'
+            const url = 'https://twitter.com/' + tweet.user.scrfeen_name + '/statuses/' + tweet.id_str;
 
-                +
-                    '<blockquote class="twitter-tweet" data-lang="en">' +
-                    '  <p lang="en" dir="ltr">just setting up my twttr</p>&mdash; Jack (@jack) <a href="https://twitter.com/jack/status/20">March 21, 2006</a>' +
-                    '</blockquote>'
-
-            });
-            marker.addListener('click', function() {
-                infoWindow.open(map, marker)
-            });
             marker.setMap(map);
+            marker.setValues({tweet: tweet});
             markers.push(marker);
+
+            google.maps.event.addListener(marker, 'click', function() {
+                $('#mapModalFooter').html('<div class="p-2">' +
+                    '<blockquote class="twitter-tweet" lang="en">' +
+                    '<p>' + tweet.text + ' </p>&mdash; ' + tweet.user.name + '@' + tweet.user.screen_name +
+                    '<a href="' + url + '">' + tweet.created_at + '</a>' +
+                    '</blockquote></div>');
+                twttr.widgets.load();
+            });
 
             if (recenter) {
                 map.setCenter(marker.getPosition());

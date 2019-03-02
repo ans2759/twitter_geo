@@ -42,6 +42,8 @@
         function initPage() {
             MessageBus.subscribe(MessageBus.events.CONNECTION_UPDATE, (event, data) => {
                 _this.streamConnected = data.connected;
+                const connectonStatus =  _this.streamConnected ? "connected" : "disconnected";
+                ngToast.info("Twitter stream " + connectonStatus);
             });
 
             MessageBus.subscribe(MessageBus.events.TWEETS_COLLECTED, (event, data) => {

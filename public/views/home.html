@@ -12,10 +12,15 @@
     </div>
 
     <div class="d-flex flex-wrap" data-ng-if="!ctrl.showLoader">
-        <div class="p-2" data-ng-repeat="word in ctrl.words | orderBy : '-count' | filter: ctrl.wordSearch">
+        <div data-ng-if="ctrl.showWords" class="p-2" data-ng-repeat="word in ctrl.words | orderBy : '-count' | filter: ctrl.wordSearch">
             <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center cursor-pointer" ui-sref="word({word: word.word})">
                 <h5 class="p-2">{{word.word}}</h5>
                 <span class="p-2 badge badge-primary badge-pill">{{word.count}}</span>
+            </div>
+        </div>
+        <div data-ng-if="!ctrl.showWords" class="p-2">
+            <div class="jumbotron bg-light">
+                <h1 class="display-4">Not enough data loaded</h1>
             </div>
         </div>
     </div>
