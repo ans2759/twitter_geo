@@ -48,4 +48,11 @@ const app = angular.module("app", ['ui.router', 'ngResource', 'ngCookies', 'ngTo
             controllerAs: 'ctrl',
             templateUrl: 'views/notAuthorized.html'
         });
+
+        $stateProvider.state('user', {
+            url: '/user',
+            controller: 'UserCtrl',
+            controllerAs: 'ctrl',
+            templateUrl: 'views/user.html'
+        });
     });

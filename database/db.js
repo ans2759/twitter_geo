@@ -119,6 +119,35 @@ exports.createUser = function(user) {
     });
 };
 
+exports.updateUserMembership = function(user, subscriptionType) {
+    return new Promise(function (resolve, reject) {
+        let validUntil;
+        switch (subscriptionType) {
+            case 'MONTHLY':
+                validUntil = DateTime.addMonths(new Date(), 1).getTime();
+                break;
+            case 'YEARLY':
+                validUntil = DateTime.addYears(new Date(), 1).getTime();
+                break;
+            default:
+                console.error("Invalid subscription type");
+                reject("Invalid subscription type");
+        }
+        MongoClient.connect(URL).then(function(client) {
+            const db = client.db(DB_NAME);
+            db.collection('users').updateOne(
+                {userId: user.userId},
+                {$set: {
+                    isMember: true,
+                    validUntil: validUntil
+                    }}
+                , function (err, result) {
+                closeAndResolve(resolve, reject, client, err, result);
+            })
+        });
+    });
+};
+
 exports.deleteUser = function(id) {
     return new Promise(function (resolve, reject) {
         MongoClient.connect(URL).then(function(client) {
@@ -291,7 +320,9 @@ function buildUserObject(twitterUser) {
         userId: twitterUser.id,
         username: twitterUser.username,
         displayName: twitterUser.displayName,
-        isAdmin: false
+        isAdmin: false,
+        isMember: false,
+        validUntil: new Date().getTime()
     }
 }
 

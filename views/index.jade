@@ -1,7 +1,0 @@
-extends layout
-
-block content
-  h1= title
-  p Welcome to #{title}
-  each word in commonWords
-    a(href='word/#{word.word}') #{word.word} <br>

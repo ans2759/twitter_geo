@@ -9,10 +9,9 @@ const myCache = new NodeCache( { stdTTL: STANDARD_TTL, checkperiod: CHECK_PERIOD
 
 exports.set = (key, data, ttl) => {
     return new Promise((resolve, reject) => {
-        const ttlValue = ttl ? ttl : STANDARD_TTL;
         myCache.set(key, data, (err, success) => {
             if (err || !success) {
-                console.error('Error caching ' + key, err)
+                console.error('Error caching ' + key, err);
                 reject();
             } else {
                 console.log(key + " cached");

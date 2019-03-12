@@ -7,6 +7,11 @@ const cel = require('connect-ensure-login');
 const latLngRegex = new RegExp("^-?[0-9]{1,3}\\.[0-9]{1,3}$");
 const stopWords = require('../twitter/stopWords');
 const yelp = require('../yelp/yelpClient');
+const DateTime = require('date-and-time');
+const paymentProcessor = require('../utils/paymentProcessor');
+
+const MONTHLY_COST = 5.00;
+const YEARLY_COST = 50.00;
 
 /**
  * *****************************Home Routes
@@ -53,7 +58,13 @@ router.get('/login/twitter/return',
 router.get('/getUser', cel.ensureLoggedIn(), function (req, res, next) {
     console.log('Getting User profile');
     db.getUser(req.user.id).then(function (user) {
-        res.json({user: user});
+        res.json({user: {
+                displayName: user.displayName,
+                isAdmin: user.isAdmin,
+                username: user.username,
+                isMember: user.isMember,
+                validUntil: user.validUntil
+            }});
     });
 });
 
@@ -80,6 +91,54 @@ router.post('/createUser', cel.ensureLoggedIn(), function (req, res, next) {
        res.statusMessage('No twitter user record found');
        res.status(400).end();
    }
+});
+
+router.put('/billMonthly', cel.ensureLoggedIn(), function (req, res, next) {
+    if (req.user) {
+        db.getUser(req.user.id).then((user) => {
+           if (user.validUntil < new Date().getTime()) {
+               if (!req.paymentInfo) {
+                   req.status(400).send({data: "No payment information found"})
+               } else {
+                   paymentProcessor.processPayment(req.paymentInfo, MONTHLY_COST).then(() => {
+                        db.updateUserMembership(req.user, 'MONTHLY');
+                       req.status(200).send("Payment Processed successfully")
+                   }, (error) => {
+                       req.status(500).send({data: error})
+                   })
+               }
+           } else {
+               req.status(400).send({data: "User has valid membership"})
+           }
+        });
+    } else {
+        res.statusMessage('No twitter user record found');
+        res.status(400).end();
+    }
+});
+
+router.put('/billYearly', cel.ensureLoggedIn(), function (req, res, next) {
+    if (req.user) {
+        db.getUser(req.user.id).then((user) => {
+            if (user.validUntil < new Date().getTime()) {
+                if (!req.paymentInfo) {
+                    req.status(400).send({data: "No payment information found"})
+                } else {
+                    paymentProcessor.processPayment(req.paymentInfo, YEARLY_COST).then(() => {
+                        db.updateUserMembership(req.user, 'YEARLY');
+                        req.status(200).send("Payment Processed successfully")
+                    }, (error) => {
+                        req.status(500).send({data: error})
+                    })
+                }
+            } else {
+                req.status(400).send({data: "User has valid membership"})
+            }
+        });
+    } else {
+        res.statusMessage('No twitter user record found');
+        res.status(400).end();
+    }
 });
 /**
  * *****************************End User Routes

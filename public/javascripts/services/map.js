@@ -101,7 +101,9 @@
         // Deletes all markers in the array by removing references to them.
         _this.deleteMarkers = function() {
             clearMarkers();
-            mapModalFooter.html('<div class="p-2"></div>');
+            if (mapModalFooter) {
+                mapModalFooter.html('<div class="p-2"></div>');
+            }
             markers = [];
         };
 
