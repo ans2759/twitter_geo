@@ -54,7 +54,6 @@ const TweetCatcher = (function() {
                                 console.log(' Twitter ERROR-----------: ' + err);
                                 connected = false;
                                 client.close();
-                                throw err;
                             });
                         });
                     });

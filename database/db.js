@@ -136,12 +136,13 @@ exports.updateUserMembership = function(user, subscriptionType) {
         MongoClient.connect(URL).then(function(client) {
             const db = client.db(DB_NAME);
             db.collection('users').updateOne(
-                {userId: user.userId},
+                {userId: user.id},
                 {$set: {
                     isMember: true,
                     validUntil: validUntil
                     }}
                 , function (err, result) {
+                    myCache.delete(USER_PREFIX + user.id);
                 closeAndResolve(resolve, reject, client, err, result);
             })
         });
@@ -230,8 +231,6 @@ exports.createIndexes = function() {
     MongoClient.connect(URL).then(function(client) {
         const db = client.db(DB_NAME);
         db.collection('users').createIndex({userId: 1});
-        db.collection('users').createIndex({username: 1});
-        db.collection('users').createIndex({displayName: 1});
         db.collection('indexedwords').createIndex({word: 1});
         db.collection('indexedwords').createIndex({count: 1});
         db.collection('testtweets').createIndex({timestamp_ms: 1});

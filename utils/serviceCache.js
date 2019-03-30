@@ -26,10 +26,23 @@ exports.get = (key) => {
         myCache.get(key, (err, value) => {
             if (err) {
                 console.error("Error retrieving " + key + " from cache", err);
-                resolve();
+                reject()
             } else {
                 resolve(value);
             }
         });
     });
 };
+
+exports.delete = (key) => {
+    return new Promise(((resolve, reject) => {
+        myCache.del(key, (err, count) => {
+            if (err) {
+                console.error("Error deleting record for key " + key, err);
+                reject();
+            } else {
+                resolve();
+            }
+        })
+    }))
+}

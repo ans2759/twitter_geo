@@ -106,6 +106,16 @@
                     method: 'GET',
                     isArray: true,
                     url: '/yelp-search-geo'
+                },
+                billMonthly: {
+                    method: 'PUT',
+                    isArray: false,
+                    url: '/billMonthly'
+                },
+                billYearly: {
+                    method: 'PUT',
+                    isArray: false,
+                    url: 'billYearly'
                 }
             }
         );

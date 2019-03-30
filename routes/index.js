@@ -97,18 +97,19 @@ router.put('/billMonthly', cel.ensureLoggedIn(), function (req, res, next) {
     if (req.user) {
         db.getUser(req.user.id).then((user) => {
            if (user.validUntil < new Date().getTime()) {
-               if (!req.paymentInfo) {
-                   req.status(400).send({data: "No payment information found"})
+               if (!req.body.paymentInfo) {
+                   res.status(400).send({data: "No payment information found"})
                } else {
-                   paymentProcessor.processPayment(req.paymentInfo, MONTHLY_COST).then(() => {
-                        db.updateUserMembership(req.user, 'MONTHLY');
-                       req.status(200).send("Payment Processed successfully")
+                   paymentProcessor.processPayment(req.body.paymentInfo, MONTHLY_COST).then(() => {
+                        db.updateUserMembership(req.user, 'MONTHLY').then(() => {
+                            res.status(200).send("Payment Processed successfully")
+                        });
                    }, (error) => {
-                       req.status(500).send({data: error})
+                       res.status(500).send({data: error})
                    })
                }
            } else {
-               req.status(400).send({data: "User has valid membership"})
+               res.status(400).send({data: "User has valid membership"})
            }
         });
     } else {
@@ -121,18 +122,18 @@ router.put('/billYearly', cel.ensureLoggedIn(), function (req, res, next) {
     if (req.user) {
         db.getUser(req.user.id).then((user) => {
             if (user.validUntil < new Date().getTime()) {
-                if (!req.paymentInfo) {
-                    req.status(400).send({data: "No payment information found"})
+                if (!req.body.paymentInfo) {
+                    res.status(400).send({data: "No payment information found"})
                 } else {
-                    paymentProcessor.processPayment(req.paymentInfo, YEARLY_COST).then(() => {
+                    paymentProcessor.processPayment(req.body.paymentInfo, YEARLY_COST).then(() => {
                         db.updateUserMembership(req.user, 'YEARLY');
-                        req.status(200).send("Payment Processed successfully")
+                        res.status(200).send("Payment Processed successfully")
                     }, (error) => {
-                        req.status(500).send({data: error})
+                        res.status(500).send({data: error})
                     })
                 }
             } else {
-                req.status(400).send({data: "User has valid membership"})
+                res.status(400).send({data: "User has valid membership"})
             }
         });
     } else {
