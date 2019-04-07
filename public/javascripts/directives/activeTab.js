@@ -1,26 +1,28 @@
 (function () {
     'use strict';
     const app = angular.module('app');
-    const ActiveTab = function () {
+    const ActiveTab = function ($location, $transitions) {
         console.log("ActiveTab init");
 
         return {
             restrict: 'A',
             link: function link(scope, element, attrs) {
-                element.on('click', () => {
-                    scope.currentTab = attrs.activeTab;
-                });
-
-                scope.$watch('currentTab', (newVal, oldVal) => {
-                    if (attrs.activeTab === scope.currentTab) {
+                function update() {
+                    if ($location.path().includes(attrs.activeTab)) {
                         element.addClass('active');
-                    } else if (scope.currentTab) {
+                    } else {
                         element.removeClass('active')
                     }
+                }
+
+                update();
+
+                $transitions.onSuccess({}, function(transition) {
+                    update()
                 });
             }
         }
     };
-    ActiveTab.$inject = [];
+    ActiveTab.$inject = ['$location', '$transitions'];
     app.directive("activeTab", ActiveTab)
 }());
