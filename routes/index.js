@@ -96,7 +96,7 @@ router.post('/createUser', cel.ensureLoggedIn(), function (req, res, next) {
 router.put('/billMonthly', cel.ensureLoggedIn(), function (req, res, next) {
     if (req.user) {
         db.getUser(req.user.id).then((user) => {
-           if (user.validUntil < new Date().getTime()) {
+           if (!user.isMember || user.validUntil < new Date().getTime()) {
                if (!req.body.paymentInfo) {
                    res.status(400).send({data: "No payment information found"})
                } else {
@@ -121,7 +121,7 @@ router.put('/billMonthly', cel.ensureLoggedIn(), function (req, res, next) {
 router.put('/billYearly', cel.ensureLoggedIn(), function (req, res, next) {
     if (req.user) {
         db.getUser(req.user.id).then((user) => {
-            if (user.validUntil < new Date().getTime()) {
+            if (!user.isMember || user.validUntil < new Date().getTime()) {
                 if (!req.body.paymentInfo) {
                     res.status(400).send({data: "No payment information found"})
                 } else {
@@ -148,7 +148,7 @@ router.put('/billYearly', cel.ensureLoggedIn(), function (req, res, next) {
 /**
  * *****************************Word Routes
  */
-router.get('/word', cel.ensureLoggedIn(),  function (req, res, next) {
+router.get('/word', function (req, res, next) {
     const word = req.query.word;
     console.log('Getting tweets for ' + word);
     if (word != null && word !== '') {
@@ -162,19 +162,19 @@ router.get('/word', cel.ensureLoggedIn(),  function (req, res, next) {
     }
 });
 
-router.get('/common-words', cel.ensureLoggedIn(), function (req, res, next) {
+router.get('/common-words', function (req, res, next) {
     console.log('Sending common words');
     db.getIndex().then(function (words) {
         res.json(words);
     })
 });
 
-router.get('/yelp-search', cel.ensureLoggedIn(), function(req, res, next) {
+router.get('/yelp-search', cel.ensureLoggedIn(), isValidMember(), function(req, res, next) {
     const word = req.query.word;
     console.log('Querying yelp for word: ' + word);
     if (word != null && word !== '') {
         const loc = tweetCatcher.getCenter();
-        yelp.search(word, loc.lat, loc.lng).then((result) => {
+        yelp.search(word, loc.lat, loc.lng, false).then((result) => {
             res.status(200).send(result);
         }, (error) => {
             res.status(500).send({data: error});
@@ -185,12 +185,13 @@ router.get('/yelp-search', cel.ensureLoggedIn(), function(req, res, next) {
     }
 });
 
-router.get('/yelp-search-geo', cel.ensureLoggedIn(), function(req, res, next) {
+router.get('/yelp-search-geo', cel.ensureLoggedIn(), isValidMember(), function(req, res, next) {
     const lat = req.query.lat;
     const lng = req.query.lng;
+    const word = req.query.word;
     console.log('Querying yelp for lat: ' + lat + "and lng: " + lng);
     if (lat != null && lat !== '' && lng != null && lng !== '') {
-        yelp.search(null, lat, lng).then((result) => {
+        yelp.search(word, lat, lng, true).then((result) => {
             res.status(200).send(result);
         }, (error) => {
             res.status(500).send({data: error});
@@ -363,6 +364,18 @@ function isAdmin() {
     return function(req, res, next) {
         db.isAdmin(req.user.id).then(function(isAdmin) {
             if (isAdmin) {
+                next();
+            } else {
+                res.status(400).send("Unauthorized");
+            }
+        });
+    }
+}
+
+function isValidMember() {
+    return function(req, res, next) {
+        db.getUser(req.user.id).then(function(user) {
+            if (user.isMember && user.validUntil > new Date().getTime()) {
                 next();
             } else {
                 res.status(400).send("Unauthorized");

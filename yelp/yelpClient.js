@@ -7,25 +7,24 @@ const SECONDS_IN_A_DAY = 86400;
 const YELP_BUSINESS_PREFIX = "YELP_BUSINESS_";
 const NUMERIC = /[^0-9-]+/g;
 
-exports.search = (term, latitude, longitude) => {
-    const termExists = term !== null && term !== '';
-
+exports.search = (term, latitude, longitude, isGeo) => {
     function getBody() {
-        return termExists ?
+        return !isGeo ?
             {
                 term: term,
                 latitude: latitude,
                 longitude: longitude
             } :
             {
+                term: term,
                 latitude: latitude,
                 longitude: longitude,
-                radius: 500
+                radius: 250
             };
     }
 
     const getKey = function() {
-        return termExists ?
+        return !isGeo ?
             YELP_BUSINESS_PREFIX + term :
             YELP_BUSINESS_PREFIX + latitude.toString().replace(NUMERIC, '') + "_" + longitude.toString().replace(NUMERIC, '');
     };

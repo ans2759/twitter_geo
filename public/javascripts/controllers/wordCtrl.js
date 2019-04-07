@@ -17,6 +17,7 @@
         _this.filterOnGeo = false;
         _this.hasGeo = false;
         _this.businesses = [];
+        _this.isValidUser = false;
 
         ResourceFactory.getWord({word: $stateParams.word}, function (response) {
             _this.tweets = response;
@@ -25,6 +26,10 @@
             _this.showLoader = false;
         }, function (err) {
             console.error('Error retrieving tweets for ' + $stateParams.word, err);
+        });
+
+        ResourceFactory.getUser({}, function(response) {
+            _this.isValidUser = response.user.isMember && response.user.validUntil > new Date().getTime();
         });
 
         _this.showTweet = function(tweet) {
@@ -47,7 +52,7 @@
         };
 
         _this.searchYelp = function() {
-            if (_this.businesses.length === 0) {
+            if (_this.isValidUser) {
                 ResourceFactory.yelpSearch({word: _this.word}, (response) => {
                     _this.businesses = response;
                 });
@@ -55,9 +60,11 @@
         };
 
         _this.searchYelpGeo = function(tweet) {
-            ResourceFactory.yelpSearchGeo({lat: tweet.geo.coordinates[0], lng: tweet.geo.coordinates[1]}, (response) => {
-                _this.businesses = response;
-            });
+            if (_this.isValidUser) {
+                ResourceFactory.yelpSearchGeo({word: _this.word, lat: tweet.geo.coordinates[0], lng: tweet.geo.coordinates[1]}, (response) => {
+                    _this.businesses = response;
+                });
+            }
         };
 
         _this.getStarImageUrl = function(rating) {

@@ -75,31 +75,36 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div data-ng-if="ctrl.businesses.length > 0" class="modal-body">
-                <div data-ng-repeat="business in ctrl.businesses" class="d-flex align-items-stretch">
-                    <div class="p-2" style="max-height: 150px">
-                        <a href="{{business.url}}" target="_blank">
-                            <img class="img-fluid img-thumbnail yelp-business-logo" data-ng-src="{{business.image_url}}" alt="Business Image">
-                        </a>
-                    </div>
-                    <div class="p-2">
-                        <h5 class="mt-0 mb-1">{{business.name}}</h5>
-                        <span class="d-block">{{business.location.display_address[0]}}</span>
-                        <span class="d-block">{{business.location.display_address[1]}}</span>
-                        <a href="{{business.url}}" target="_blank">
-                            <img class="d-inline-block" data-ng-src="{{ctrl.getStarImageUrl(business.rating)}}" alt="Business rating is {{business.rating}}stars">
-                        </a>
-                        <span class="font-weight-light"> {{business.review_count}} reviews</span>
-                        <div>
+            <div data-ng-if="ctrl.isValidUser">
+                <div data-ng-if="ctrl.businesses.length > 0" class="modal-body">
+                    <div data-ng-repeat="business in ctrl.businesses" class="d-flex align-items-stretch">
+                        <div class="p-2" style="max-height: 150px">
                             <a href="{{business.url}}" target="_blank">
-                                <img class="img-fluid yelp-logo" src="images/yelp/Yelp_trademark_RGB.png" alt="Yelp logo">
+                                <img class="img-fluid img-thumbnail yelp-business-logo" data-ng-src="{{business.image_url}}" alt="Business Image">
                             </a>
+                        </div>
+                        <div class="p-2">
+                            <h5 class="mt-0 mb-1">{{business.name}}</h5>
+                            <span class="d-block">{{business.location.display_address[0]}}</span>
+                            <span class="d-block">{{business.location.display_address[1]}}</span>
+                            <a href="{{business.url}}" target="_blank">
+                                <img class="d-inline-block" data-ng-src="{{ctrl.getStarImageUrl(business.rating)}}" alt="Business rating is {{business.rating}}stars">
+                            </a>
+                            <span class="font-weight-light"> {{business.review_count}} reviews</span>
+                            <div>
+                                <a href="{{business.url}}" target="_blank">
+                                    <img class="img-fluid yelp-logo" src="images/yelp/Yelp_trademark_RGB.png" alt="Yelp logo">
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div data-ng-if="ctrl.businesses.length === 0" class="modal-body">
+                    <h1>No business found</h1>
+                </div>
             </div>
-            <div data-ng-if="ctrl.businesses.length === 0" class="modal-body">
-                <h1>No business found</h1>
+            <div data-ng-if="!ctrl.isValidUser" class="modal-body">
+                <h1>Membership is required to access Yelp searches</h1>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
