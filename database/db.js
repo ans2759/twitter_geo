@@ -142,8 +142,9 @@ exports.updateUserMembership = function(user, subscriptionType) {
                     validUntil: validUntil
                     }}
                 , function (err, result) {
-                    myCache.delete(USER_PREFIX + user.id);
-                closeAndResolve(resolve, reject, client, err, result);
+                    myCache.delete(USER_PREFIX + user.id).then(function() {
+                        closeAndResolve(resolve, reject, client, err, validUntil);
+                    });
             })
         });
     });

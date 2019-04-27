@@ -29,7 +29,7 @@
         });
 
         ResourceFactory.getUser({}, function(response) {
-            _this.isValidUser = response.user.isMember && response.user.validUntil > new Date().getTime();
+            _this.isValidUser = response.user && response.user.isMember && response.user.validUntil > new Date().getTime();
         });
 
         _this.showTweet = function(tweet) {

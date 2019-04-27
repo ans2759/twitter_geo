@@ -25,7 +25,7 @@ router.get('/', function (req, res, next) {
     }
 });
 
-router.get('/home', cel.ensureLoggedIn(), function (req, res, next) {
+router.get('/home', function (req, res, next) {
     console.log('Sending home page');
     res.sendFile('index.html', {root: './public/views'})
 });
@@ -58,13 +58,17 @@ router.get('/login/twitter/return',
 router.get('/getUser', cel.ensureLoggedIn(), function (req, res, next) {
     console.log('Getting User profile');
     db.getUser(req.user.id).then(function (user) {
-        res.json({user: {
-                displayName: user.displayName,
-                isAdmin: user.isAdmin,
-                username: user.username,
-                isMember: user.isMember,
-                validUntil: user.validUntil
-            }});
+        if (user) {
+            res.status(200).json({user: {
+                    displayName: user.displayName,
+                    isAdmin: user.isAdmin,
+                    username: user.username,
+                    isMember: user.isMember,
+                    validUntil: user.validUntil
+                }});
+        } else {
+            res.status(204).send();
+        }
     });
 });
 
@@ -76,7 +80,11 @@ router.get('/getTwitterUser', cel.ensureLoggedIn(), function (req, res, next) {
 router.get('/isAdmin', cel.ensureLoggedIn(), function (req, res, next) {
     console.log("isAdmin");
     db.getUser(req.user.id).then(function (user) {
-        res.json({isAdmin: user.isAdmin});
+        let isAdmin = false;
+        if (user) {
+            isAdmin = user.isAdmin;
+        }
+        res.json({isAdmin: isAdmin});
     });
 });
 
@@ -93,41 +101,17 @@ router.post('/createUser', cel.ensureLoggedIn(), function (req, res, next) {
    }
 });
 
-router.put('/billMonthly', cel.ensureLoggedIn(), function (req, res, next) {
-    if (req.user) {
-        db.getUser(req.user.id).then((user) => {
-           if (!user.isMember || user.validUntil < new Date().getTime()) {
-               if (!req.body.paymentInfo) {
-                   res.status(400).send({data: "No payment information found"})
-               } else {
-                   paymentProcessor.processPayment(req.body.paymentInfo, MONTHLY_COST).then(() => {
-                        db.updateUserMembership(req.user, 'MONTHLY').then(() => {
-                            res.status(200).send("Payment Processed successfully")
-                        });
-                   }, (error) => {
-                       res.status(500).send({data: error})
-                   })
-               }
-           } else {
-               res.status(400).send({data: "User has valid membership"})
-           }
-        });
-    } else {
-        res.statusMessage('No twitter user record found');
-        res.status(400).end();
-    }
-});
-
-router.put('/billYearly', cel.ensureLoggedIn(), function (req, res, next) {
-    if (req.user) {
-        db.getUser(req.user.id).then((user) => {
+function billMonthly(req, res) {
+    db.getUser(req.user.id).then((user) => {
+        if (user) {
             if (!user.isMember || user.validUntil < new Date().getTime()) {
                 if (!req.body.paymentInfo) {
                     res.status(400).send({data: "No payment information found"})
                 } else {
-                    paymentProcessor.processPayment(req.body.paymentInfo, YEARLY_COST).then(() => {
-                        db.updateUserMembership(req.user, 'YEARLY');
-                        res.status(200).send("Payment Processed successfully")
+                    paymentProcessor.processPayment(req.body.paymentInfo, MONTHLY_COST).then(() => {
+                        db.updateUserMembership(req.user, 'MONTHLY').then((result) => {
+                            res.status(200).send({validUntil: result})
+                        });
                     }, (error) => {
                         res.status(500).send({data: error})
                     })
@@ -135,7 +119,52 @@ router.put('/billYearly', cel.ensureLoggedIn(), function (req, res, next) {
             } else {
                 res.status(400).send({data: "User has valid membership"})
             }
-        });
+        } else {
+            db.createUser(req.user).then(function (result) {
+                billMonthly(req, res);
+            })
+        }
+    });
+};
+
+router.put('/billMonthly', cel.ensureLoggedIn(), function (req, res, next) {
+    if (req.user) {
+        billMonthly(req, res);
+    } else {
+        res.statusMessage('No twitter user record found');
+        res.status(400).end();
+    }
+});
+
+function billYearly(req, res) {
+    db.getUser(req.user.id).then((user) => {
+        if (user) {
+            if (!user.isMember || user.validUntil < new Date().getTime()) {
+                if (!req.body.paymentInfo) {
+                    res.status(400).send({data: "No payment information found"})
+                } else {
+                    paymentProcessor.processPayment(req.body.paymentInfo, YEARLY_COST).then(() => {
+                        db.updateUserMembership(req.user, 'YEARLY').then((result) => {
+                            res.status(200).json({validUntil: result})
+                        });
+                    }, (error) => {
+                        res.status(500).send({data: error})
+                    })
+                }
+            } else {
+                res.status(400).send({data: "User has valid membership"})
+            }
+        } else {
+            db.createUser(req.user).then(function (result) {
+                billYearly(req, res);
+            })
+        }
+    });
+};
+
+router.put('/billYearly', cel.ensureLoggedIn(), function (req, res, next) {
+    if (req.user) {
+        billYearly(req, res);
     } else {
         res.statusMessage('No twitter user record found');
         res.status(400).end();

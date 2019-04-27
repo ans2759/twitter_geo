@@ -1,6 +1,6 @@
 <div class="jumbotron bg-light">
     <h1>{{ctrl.user.displayName}}</h1>
-    <div data-ng-if="ctrl.showForm">
+    <div data-ng-if="ctrl.showForm  && !ctrl.showLoader">
         <form class="needs-validation" novalidate>
             <div class="form-group col-6">
                 <label for="name">Full Name</label>
@@ -53,7 +53,10 @@
             </button>
         </form>
     </div>
-    <div data-ng-if="!ctrl.showForm">
+    <div data-ng-if="!ctrl.showForm && !ctrl.showLoader">
         <h2>Membership valid until: {{ctrl.user.validUntil | date: 'yyyy-MM-dd'}}</h2>
+    </div>
+    <div data-ng-if="ctrl.showLoader" class="d-flex justify-content-center">
+        <div class="loader"></div>
     </div>
 </div>

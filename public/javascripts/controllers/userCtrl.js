@@ -18,20 +18,28 @@
         _this.user = {};
         _this.paymentInfo = {};
         _this.showForm = true;
+        _this.showLoader = true;
 
         ResourceFactory.getUser({}, function (response) {
-            _this.user = response.user;
-            _this.showForm = !_this.user.isMember || _this.user.validUntil < new Date().getTime();
+            _this.showLoader = false;
+            if (response.user) {
+                _this.user = response.user;
+                _this.showForm = !_this.user.isMember || _this.user.validUntil < new Date().getTime();
+            }
         }, function (error) {
             console.error(error);
             $state.go('notAuthorized', {section: 'User'});
         });
 
         _this.billMonthly = function() {
+            _this.showLoader = true;
             ResourceFactory.billMonthly({paymentInfo: _this.paymentInfo}, function(response) {
+                _this.showLoader = false;
                 _this.showForm = false;
+                _this.user.validUntil = response.validUntil;
                 ngToast.success('Membership Successfully Updated!')
             }, function(response) {
+                _this.showLoader = false;
                 if (response.status === 400) {
                     ngToast.info(response.data.data)
                 } else {
@@ -41,10 +49,14 @@
         };
 
         _this.billYearly = function() {
+            _this.showLoader = true;
             ResourceFactory.billYearly({paymentInfo: _this.paymentInfo}, function(response) {
+                _this.showLoader = false;
+                _this.user.validUntil = response.validUntil;
                 _this.showForm = false;
                 ngToast.success('Membership Successfully Updated!')
             }, function(response) {
+                _this.showLoader = false;
                 if (response.status === 400) {
                     ngToast.info(response.data.data)
                 } else {
