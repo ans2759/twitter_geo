@@ -1,9 +1,6 @@
 /**
  * Created by alexs on 2/18/2018.
  */
-const lowerLeft = '-74.042,40.687';
-const upperRight = '-73.878,40.859';
-const lonLat = lowerLeft + ',' + upperRight;
 
 const APIKeys = require('../secure/twitterAccess');
 const MongoClient = require('mongodb').MongoClient;
@@ -21,10 +18,8 @@ const TweetCatcher = (function() {
     let connected = false;
     let counter = 0;
     let globalClient;
-
-    let lowerLeft = '-74.042,40.687';
-    let upperRight = '-73.878,40.859';
-    let lonLat = lowerLeft + ',' + upperRight;
+    let lowerLeft = '';
+    let upperRight = '';
 
     function init() {
         let streamReference;
@@ -43,9 +38,8 @@ const TweetCatcher = (function() {
                         db.collection('twitter').findOne({}, function (err, result) {
                             lowerLeft = result.lowerLeft.lng + ',' + result.lowerLeft.lat;
                             upperRight = result.upperRight.lng + ',' + result.upperRight.lat;
-                            lonLat = lowerLeft + ',' + upperRight;
 
-                            twitterClient.stream('statuses/filter', {locations: lonLat}, function(stream) {
+                            twitterClient.stream('statuses/filter', {locations: lowerLeft + ',' + upperRight}, function(stream) {
                                 resolve();
                                 connected = true;
                                 counter = 0;
@@ -94,18 +88,41 @@ const TweetCatcher = (function() {
                 instance = init();
             }
             return instance;
-        }
+        },
+        lowerLeft: lowerLeft,
+        upperRight: upperRight
     }
 })();
 exports.TweetCatcher = TweetCatcher;
 
 exports.getCenter = function () {
-    const lower = lowerLeft.split(',');
-    const upper = upperRight.split(',');
-    return {
-        lat: calcMiddle(parseFloat(upper[1]), parseFloat(lower[1])),
-        lng: calcMiddle(parseFloat(upper[0]), parseFloat(lower[0]))
-    };
+    function resolveCenter(tcLowerLeft, tcUpperRight, resolve) {
+        const lower = tcLowerLeft.split(',');
+        const upper = tcUpperRight.split(',');
+        resolve({
+            lat: calcMiddle(parseFloat(upper[1]), parseFloat(lower[1])),
+            lng: calcMiddle(parseFloat(upper[0]), parseFloat(lower[0]))
+        });
+    }
+
+    return new Promise(function(resolve, reject) {
+        let tcLowerLeft = TweetCatcher.lowerLeft;
+        let tcUpperRight = TweetCatcher.upperRight;
+        if (!tcLowerLeft || tcLowerLeft === '' || !tcUpperRight || tcUpperRight === '') {
+            MongoClient.connect('mongodb://localhost:27017/test', function (err, client) {
+                const db = client.db('test');
+                const collection = db.collection('testtweets');
+
+                db.collection('twitter').findOne({}, function (err, result) {
+                    tcLowerLeft = result.lowerLeft.lng + ',' + result.lowerLeft.lat;
+                    tcUpperRight = result.upperRight.lng + ',' + result.upperRight.lat;
+                    resolveCenter(tcLowerLeft, tcUpperRight, resolve);
+                });
+            });
+        } else {
+            resolveCenter(tcLowerLeft, tcUpperRight, resolve);
+        }
+    })
 };
 
 exports.getNewCenter = function(lowerLeftLat, lowerLeftLng, upperRightLat, upperRightLng) {

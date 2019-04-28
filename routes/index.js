@@ -202,11 +202,12 @@ router.get('/yelp-search', cel.ensureLoggedIn(), isValidMember(), function(req, 
     const word = req.query.word;
     console.log('Querying yelp for word: ' + word);
     if (word != null && word !== '') {
-        const loc = tweetCatcher.getCenter();
-        yelp.search(word, loc.lat, loc.lng, false).then((result) => {
-            res.status(200).send(result);
-        }, (error) => {
-            res.status(500).send({data: error});
+        tweetCatcher.getCenter().then((loc) => {
+            yelp.search(word, loc.lat, loc.lng, false).then((result) => {
+                res.status(200).send(result);
+            }, (error) => {
+                res.status(500).send({data: error});
+            });
         });
     } else {
         console.error('No word provided');
@@ -384,7 +385,9 @@ router.get('/getTweetCount', cel.ensureLoggedIn(), isAdmin(), (req, res, next) =
  * *****************************Common Routes
  */
 router.get('/coordinates', cel.ensureLoggedIn(), function(req, res, next) {
-    res.json(tweetCatcher.getCenter());
+    tweetCatcher.getCenter().then((center) => {
+        res.json(center);
+    });
 });
 /**
  * *****************************End Common Routes
