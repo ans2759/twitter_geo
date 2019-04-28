@@ -22,6 +22,10 @@ const TweetCatcher = (function() {
     let counter = 0;
     let globalClient;
 
+    let lowerLeft = '-74.042,40.687';
+    let upperRight = '-73.878,40.859';
+    let lonLat = lowerLeft + ',' + upperRight;
+
     function init() {
         let streamReference;
 
@@ -36,24 +40,31 @@ const TweetCatcher = (function() {
                         const db = client.db('test');
                         const collection = db.collection('testtweets');
 
-                        twitterClient.stream('statuses/filter', {locations: lonLat}, function(stream) {
-                            resolve();
-                            connected = true;
-                            streamReference = stream;
+                        db.collection('twitter').findOne({}, function (err, result) {
+                            lowerLeft = result.lowerLeft.lng + ',' + result.lowerLeft.lat;
+                            upperRight = result.upperRight.lng + ',' + result.upperRight.lat;
+                            lonLat = lowerLeft + ',' + upperRight;
 
-                            stream.on('data', function (tweet) {
-                                tweet.timestamp_ms = parseInt(tweet.timestamp_ms);
-                                collection.insertOne(tweet, function (err, r) {
-                                    assert.equal(null, err);
-                                    counter++;
+                            twitterClient.stream('statuses/filter', {locations: lonLat}, function(stream) {
+                                resolve();
+                                connected = true;
+                                counter = 0;
+                                streamReference = stream;
+
+                                stream.on('data', function (tweet) {
+                                    tweet.timestamp_ms = parseInt(tweet.timestamp_ms);
+                                    collection.insertOne(tweet, function (err, r) {
+                                        assert.equal(null, err);
+                                        counter++;
+                                    });
                                 });
-                            });
 
-                            stream.on('error', function (err) {
-                                reject();
-                                console.log(' Twitter ERROR-----------: ' + err);
-                                connected = false;
-                                client.close();
+                                stream.on('error', function (err) {
+                                    console.log(' Twitter ERROR-----------: ' + err);
+                                    connected = false;
+                                    client.close();
+                                    resolve();
+                                });
                             });
                         });
                     });

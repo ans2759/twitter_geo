@@ -281,17 +281,21 @@ router.put('/changeAdminStatus', cel.ensureLoggedIn(), isAdmin(), function(req, 
 
 router.put('/updateCorners', cel.ensureLoggedIn(), isAdmin(), function(req, res, next) {
     console.log('Updating bounding info');
-    if (isValidLatitude(req.body.boundingInfo.lowerLeft.lat) && isValidLatitude(req.body.boundingInfo.upperRight.lat) &&
-        isValidLongitude(req.body.boundingInfo.lowerLeft.lng) && isValidLongitude(req.body.boundingInfo.upperRight.lng)) {
-        db.updateBoundingInfo(req.body.boundingInfo).then(function (data) {
-            if (data.modifiedCount > 0) {
-                res.status(200).send("Successfully updated");
-            } else {
-                res.status(500).send("bounding info not modified");
-            }
-        })
+    if (tweetCatcher.TweetCatcher.getInstance().isConnected()) {
+        res.status(400).send("Cannot update while stream is connected");
     } else {
-        res.status(400).send("Invalid bounding info");
+        if (isValidLatitude(req.body.boundingInfo.lowerLeft.lat) && isValidLatitude(req.body.boundingInfo.upperRight.lat) &&
+            isValidLongitude(req.body.boundingInfo.lowerLeft.lng) && isValidLongitude(req.body.boundingInfo.upperRight.lng)) {
+            db.updateBoundingInfo(req.body.boundingInfo).then(function (data) {
+                if (data.modifiedCount > 0) {
+                    res.status(200).send("Successfully updated");
+                } else {
+                    res.status(500).send("bounding info not modified");
+                }
+            })
+        } else {
+            res.status(400).send("Invalid bounding info");
+        }
     }
 });
 

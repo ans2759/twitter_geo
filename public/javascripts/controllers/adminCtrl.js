@@ -141,6 +141,7 @@
             _this.showBoundingInfoLoader = true;
             ResourceFactory.updateCorners({boundingInfo: _this.boundingInfo}, function(response) {
                 _this.showBoundingInfoLoader = false;
+                angular.copy(_this.boundingInfo, originalBoundingInfo);
                 ngToast.success("Bounding info successfully updated");
             }, function(error) {
                 _this.showBoundingInfoLoader = false;
